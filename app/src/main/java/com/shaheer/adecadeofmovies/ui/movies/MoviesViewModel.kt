@@ -26,4 +26,22 @@ class MoviesViewModel @Inject constructor(
         _movies.value = Result.Loading
         compositeDisposable.add(disposable)
     }
+
+    fun searchMovies(query: String){
+        val startTime = System.currentTimeMillis()
+        val disposable = moviesRepository.getMoviesAgainstQuery(query)
+            .subscribe { moviesInYears, throwable ->
+                Log.d("MoviesViewModel","Duration :: ${System.currentTimeMillis() - startTime}")
+//                moviesInYears?.let{
+//                    it.forEach { moviesInAYear ->
+//                        Log.d("MoviesViewModel","Year :: ${moviesInAYear.year}")
+//                        moviesInAYear.movies.forEach { movie ->
+//                            Log.d("MoviesViewModel","-- Movie :: $movie")
+//                        }
+//                    }
+//                }
+                throwable?.printStackTrace()
+            }
+        compositeDisposable.add(disposable)
+    }
 }

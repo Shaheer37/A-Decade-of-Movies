@@ -18,11 +18,12 @@ data class MovieWithActorsAndGenres(
     val genre: List<Genre>
 )
 
-@Entity(indices = [Index(value = arrayOf("title")), Index(value = arrayOf("rating"))])
+@Entity(indices = [Index(value = arrayOf("trimmedTitle")), Index(value = arrayOf("rating"))])
 data class MovieEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val title: String,
+    val trimmedTitle: String,
     val year: Int,
     val rating: Int
 )

@@ -42,11 +42,14 @@ class MoviesFragment : Fragment() {
 
         viewModel.movies.observe(viewLifecycleOwner, Observer { handleMoviesResult(it) })
         viewModel.getMovies()
+        viewModel.searchMovies("ten")
+        viewModel.searchMovies("the")
+        viewModel.searchMovies("night")
     }
 
     private fun handleMoviesResult(result: Result<List<Movie>>) = when(result){
         is Result.Success -> {
-            result.data.forEach { Log.d("MoviesFragment", it.toString()) }
+//            result.data.forEach { Log.d("MoviesFragment", it.toString()) }
         }
         is Result.Error -> { result.exception.printStackTrace()}
         is Result.Loading -> {}
