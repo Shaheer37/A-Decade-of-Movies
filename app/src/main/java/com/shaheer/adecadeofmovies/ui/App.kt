@@ -1,13 +1,14 @@
 package com.shaheer.adecadeofmovies.ui
 
 import android.app.Application
+import androidx.multidex.MultiDexApplication
 import com.shaheer.adecadeofmovies.ui.injection.component.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-open class App: Application(), HasAndroidInjector {
+open class App: MultiDexApplication(), HasAndroidInjector {
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 

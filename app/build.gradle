@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply from: 'configs.gradle'
@@ -13,6 +12,7 @@ android {
         applicationId "com.shaheer.adecadeofmovies"
         minSdkVersion 16
         targetSdkVersion 30
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
 
@@ -43,12 +43,21 @@ android {
 dependencies {
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    def multidexVersion = "2.0.1"
     def lifecycleVersion = "2.2.0"
+    def roomVersion = "2.2.6"
     def daggerVersion = "2.27"
+    def rxJavaVersion = '2.2.19'
+    def rxAndroidVersion = '2.1.1'
     def okHttpVersion = "4.8.1"
     def retrofitVersion = "2.9.0"
     def gsonVersion = "2.8.6"
     def glideVersion = "4.11.0"
+    def coroutineTestVersion = "1.2.1"
+    def androidXTestCoreVersion = "1.3.0"
+    def androidXTestExtKotlinRunnerVersion = "1.1.2"
+    def archTestingVersion = "2.1.0"
+    def robolectricVersion = "4.3.1"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -58,14 +67,26 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
+    //multidex
+    implementation "androidx.multidex:multidex:$multidexVersion"
 
+    //navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    // room: database
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+
+    // rx java and rx android
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
 
     implementation "com.google.dagger:dagger:$daggerVersion"
     implementation "com.google.dagger:dagger-android:$daggerVersion"
@@ -89,6 +110,17 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
     testImplementation 'junit:junit:4.12'
+    testImplementation "androidx.test:core:$androidXTestCoreVersion"
+    testImplementation "androidx.test:runner:$androidXTestCoreVersion"
+    testImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+
+    testImplementation "androidx.room:room-testing:$roomVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineTestVersion"
+
+//    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+//    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 

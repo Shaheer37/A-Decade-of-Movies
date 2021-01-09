@@ -1,12 +1,18 @@
 package com.shaheer.adecadeofmovies.ui.injection.module
 
 import android.content.Context
+import com.google.gson.Gson
 import com.shaheer.adecadeofmovies.BuildConfig
+import com.shaheer.adecadeofmovies.data.MoviesRepositoryImpl
+import com.shaheer.adecadeofmovies.data.local.MoviesDatabase
 import com.shaheer.adecadeofmovies.ui.injection.qualifiers.ApplicationContext
 import dagger.Module
 import dagger.Provides
-import com.shaheer.adecadeofmovies.data.retrofit.DataFactory
-import com.shaheer.adecadeofmovies.data.retrofit.MoviesService
+import com.shaheer.adecadeofmovies.data.remote.DataFactory
+import com.shaheer.adecadeofmovies.data.remote.MoviesService
+import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
+import dagger.Binds
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -20,9 +26,21 @@ interface DataModule {
             return DataFactory.makeService(context = context, showLogs = BuildConfig.DEBUG)
         }
 
+        @Provides
+        @JvmStatic
+        @Singleton
+        fun providesMoviesDatabase(@ApplicationContext context: Context): MoviesDatabase {
+            return MoviesDatabase.getInstance(context)
+        }
+
+        @Provides
+        @JvmStatic
+        @Singleton
+        fun providesGson(): Gson { return Gson() }
+
     }
 
-//    @Binds
-//    @Singleton
-//    fun bindsMoviesRepository(moviesRepository: MoviesRepositoryImpl): MoviesRepository
+    @Binds
+    @Singleton
+    fun bindsMoviesRepository(moviesRepository: MoviesRepositoryImpl): MoviesRepository
 }

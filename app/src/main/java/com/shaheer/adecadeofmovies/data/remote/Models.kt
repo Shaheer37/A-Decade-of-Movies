@@ -1,4 +1,4 @@
-package com.shaheer.adecadeofmovies.data.retrofit
+package com.shaheer.adecadeofmovies.data.remote
 
 data class PhotosResponse(
     val stat: String,

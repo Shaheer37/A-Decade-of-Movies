@@ -1,4 +1,4 @@
-package com.shaheer.adecadeofmovies.data.retrofit
+package com.shaheer.adecadeofmovies.data.remote
 
 import com.shaheer.adecadeofmovies.BuildConfig
 import retrofit2.http.GET
