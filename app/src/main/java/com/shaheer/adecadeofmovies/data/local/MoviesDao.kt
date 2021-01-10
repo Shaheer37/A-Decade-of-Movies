@@ -25,7 +25,7 @@ interface MoviesDao {
     @Query("Select * from MovieEntity order by year desc")
     fun getMovies(): Single<List<MovieEntity>>
 
-    @Query("Select * from MovieEntity where trimmedTitle like '%ten%' order by year desc, rating desc")
+    @Query("Select * from MovieEntity order by year desc, rating desc")
     fun getSortedMovies(): Single<List<MovieEntity>>
 
     @Query("Select distinct year from MovieEntity order by year desc")
