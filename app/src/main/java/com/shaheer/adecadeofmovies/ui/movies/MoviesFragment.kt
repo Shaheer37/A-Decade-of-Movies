@@ -82,10 +82,6 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
         toolbar.inflateMenu(R.menu.menu)
         val searchView = toolbar.menu.findItem(R.id.action_search).actionView as SearchView
         searchView.maxWidth = Integer.MAX_VALUE
-//        searchView.setOnCloseListener {
-//            viewModel.getMovies()
-//            true
-//        }
         val disposable = Observable.create<String> {
             searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(query: String?): Boolean {

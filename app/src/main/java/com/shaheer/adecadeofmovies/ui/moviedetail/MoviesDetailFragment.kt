@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.domain.models.MovieDetails
@@ -25,7 +26,9 @@ class MoviesDetailFragment : Fragment() {
     @Inject lateinit var viewModel: MoviesDetailViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
-    val args: MoviesDetailFragmentArgs by navArgs()
+    private val args: MoviesDetailFragmentArgs by navArgs()
+
+    private val isTablet: Boolean by lazy { resources.getBoolean(R.bool.is_tablet) }
 
     companion object {
         @JvmStatic
@@ -55,9 +58,18 @@ class MoviesDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        configureLayout()
+
         viewModel.movies.observe(viewLifecycleOwner, Observer { handleMoviesResult(it) })
         viewModel.getMovieDetails(args.movieId)
     }
+
+    private fun configureLayout()
+        = if(isTablet) appbar.visibility = View.GONE
+        else {
+            appbar.visibility = View.VISIBLE
+            toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        }
 
     private fun handleMoviesResult(result: Result<MovieDetails>) = when(result){
         is Result.Success -> {
