@@ -6,6 +6,7 @@ import com.shaheer.adecadeofmovies.ui.injection.component.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import timber.log.Timber
 import javax.inject.Inject
 
 open class App: MultiDexApplication(), HasAndroidInjector {
@@ -24,5 +25,6 @@ open class App: MultiDexApplication(), HasAndroidInjector {
         super.onCreate()
 
         initDagger()
+        Timber.plant(Timber.DebugTree())
     }
 }

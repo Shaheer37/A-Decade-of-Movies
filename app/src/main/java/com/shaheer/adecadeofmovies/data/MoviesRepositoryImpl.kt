@@ -8,12 +8,15 @@ import com.shaheer.adecadeofmovies.data.local.MoviesDatabase
 import com.shaheer.adecadeofmovies.data.local.entities.MovieEntity
 import com.shaheer.adecadeofmovies.data.local.entities.MovieWithActorsAndGenres
 import com.shaheer.adecadeofmovies.data.local.models.MovieEntitiesInAYear
+import com.shaheer.adecadeofmovies.data.mapper.MovieDetailsMapper
 import com.shaheer.adecadeofmovies.data.mapper.MovieMapper
 import com.shaheer.adecadeofmovies.data.mapper.MoviesInAYearMapper
 import com.shaheer.adecadeofmovies.domain.models.Movie
+import com.shaheer.adecadeofmovies.domain.models.MovieDetails
 import com.shaheer.adecadeofmovies.domain.models.MoviesInAYear
 import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -23,34 +26,13 @@ class MoviesRepositoryImpl @Inject constructor(
     private val database: MoviesDatabase,
     private val getMoviesData: GetMoviesData,
     private val movieMapper: MovieMapper,
-    private val moviesInAYearMapper: MoviesInAYearMapper
+    private val moviesInAYearMapper: MoviesInAYearMapper,
+    private val movieDetailsMapper: MovieDetailsMapper
 ): MoviesRepository {
 
     private fun getMoviesInYearForQuerySingle() = Single.fromCallable {
         database.moviesDao().getMoviesInYearsForQuery("")
     }
-
-/*    override fun getMovies(): Single<List<MoviesInAYear>> {
-        return getMoviesInYearForQuerySingle()
-            .flatMap { movieEntitiesInYears ->
-                if(movieEntitiesInYears.isEmpty()){
-                    getMovies.get().flatMap { movies ->
-                        Completable.fromCallable { database.moviesDao().insertMovies(movies.movies) }
-                        .andThen(Single.fromCallable{database.moviesDao().getMoviesInYearsForQuery("")})
-                        .map{ moviesInAYear ->
-                            moviesInAYear.map{movieInAYear ->  moviesInAYearMapper.mapToRemote(movieInAYear)}
-                        }
-                    }
-                }else{
-                    Single.fromCallable{
-                        movieEntitiesInYears.map{movieInAYear ->
-                            moviesInAYearMapper.mapToRemote(movieInAYear)
-                        }
-                    }
-                }
-            }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }*/
 
     override fun getMovies(): Single<List<Movie>> {
         return database.moviesDao().getSortedMovies()
@@ -69,17 +51,17 @@ class MoviesRepositoryImpl @Inject constructor(
     }
 
     override fun getMoviesAgainstQuery(query: String): Single<List<MoviesInAYear>> {
-        return Single.fromCallable { database.moviesDao().getMoviesInYearsForQuery(query) }
-            /*.map {
-                it.map { entry ->
-                    MoviesInAYear(entry.key, entry.value.map {
-                            movieEntity ->  movieMapper.mapToRemote(movieEntity)
-                    })
-                }
-            }*/
+        return getMoviesInYearForQuerySingle()
             .map { moviesInAYear ->
                 moviesInAYear.map{movieInAYear ->  moviesInAYearMapper.mapToRemote(movieInAYear)}
             }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun getMovieDetails(movieId: Int): Maybe<MovieDetails> {
+        return database.moviesDao().getMovieDetails(movieId)
+            .map { movieDetailsMapper.mapToRemote(it) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

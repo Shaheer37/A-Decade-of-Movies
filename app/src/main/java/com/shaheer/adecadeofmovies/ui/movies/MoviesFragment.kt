@@ -14,9 +14,11 @@ import com.shaheer.adecadeofmovies.domain.models.Movie
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.Result
+import com.shaheer.adecadeofmovies.ui.moviedetail.MoviesDetailFragment
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MovieClickListener
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MoviesAdapter
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MoviesItemSpacingDecoration
+import com.shaheer.adecadeofmovies.utils.replaceFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_movies.*
 import javax.inject.Inject
@@ -28,6 +30,8 @@ class MoviesFragment : Fragment(), MovieClickListener {
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
     @Inject lateinit var adapter: MoviesAdapter
+
+    private val isTablet: Boolean by lazy { resources.getBoolean(R.bool.is_tablet) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -61,6 +65,7 @@ class MoviesFragment : Fragment(), MovieClickListener {
     }
 
     override fun onMovieClicked(movie: Movie) {
-        findNavController().navigate(MoviesFragmentDirections.actionMoviesToMoviesDetail(movie.id))
+        if(isTablet) replaceFragment(MoviesDetailFragment.newInstance(movie.id), R.id.fragment_container)
+        else findNavController().navigate(MoviesFragmentDirections.actionMoviesToMoviesDetail(movie.id))
     }
 }
