@@ -6,11 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.movies.MoviesFragment">
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_movies_in_years"
+        android:id="@+id/rv_movies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:listitem="@layout/row_movies_in_a_year" />
+        tools:listitem="@layout/row_year" />
 
 </FrameLayout>

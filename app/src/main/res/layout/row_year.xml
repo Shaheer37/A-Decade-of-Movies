@@ -9,10 +9,4 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         tools:text="2020"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tv_movies"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_year"
-        tools:listitem="@layout/row_movie"/>
 </RelativeLayout>
