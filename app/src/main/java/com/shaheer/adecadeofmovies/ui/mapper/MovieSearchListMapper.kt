@@ -22,6 +22,7 @@ class MovieSearchListMapper @Inject constructor(): Mapper<List<MovieListItem>, L
                 }
                 else -> {
                     if(entries<5) {
+                        entries++
                         movieItemList += MovieListItem(MovieListItemType.Movie, movie.year, movie)
                     }
                 }

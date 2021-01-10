@@ -10,8 +10,6 @@ import com.shaheer.adecadeofmovies.data.local.entities.Actor
 import com.shaheer.adecadeofmovies.data.local.entities.Genre
 import com.shaheer.adecadeofmovies.data.local.entities.MovieEntity
 import com.shaheer.adecadeofmovies.data.local.entities.MovieWithActorsAndGenres
-import com.shaheer.adecadeofmovies.data.local.models.MovieEntitiesInAYear
-import com.shaheer.adecadeofmovies.domain.models.MoviesInAYear
 import io.reactivex.Maybe
 import io.reactivex.Single
 import java.util.*
