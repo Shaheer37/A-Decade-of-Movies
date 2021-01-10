@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.shaheer.adecadeofmovies.R
-import com.shaheer.adecadeofmovies.data.getmovies.GetMovies
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
 import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers

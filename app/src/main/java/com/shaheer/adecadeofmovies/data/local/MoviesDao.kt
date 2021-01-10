@@ -25,11 +25,11 @@ interface MoviesDao {
     @Query("Select * from MovieEntity order by year desc")
     fun getMovies(): Single<List<MovieEntity>>
 
+    @Query("Select * from MovieEntity where trimmedTitle like '%ten%' order by year desc, rating desc")
+    fun getSortedMovies(): Single<List<MovieEntity>>
+
     @Query("Select distinct year from MovieEntity order by year desc")
     fun getDistinctYears(): List<Int>
-
-    @Query("Select * from MovieEntity where year = :year and trimmedTitle like '%'||:query||'%' order by rating desc limit 5")
-    fun getMoviesByYearForQuery(year: Int, query: String): List<MovieEntity>
 
     @Query("Select * from MovieEntity where trimmedTitle like '%'||:query||'%' order by year desc, rating desc")
     fun getMoviesForQuery(query: String): List<MovieEntity>

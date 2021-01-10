@@ -1,6 +1,7 @@
 package com.shaheer.adecadeofmovies.data.mapper
 
 import com.shaheer.adecadeofmovies.data.local.entities.MovieEntity
+import com.shaheer.adecadeofmovies.domain.Mapper
 import com.shaheer.adecadeofmovies.domain.models.Movie
 import javax.inject.Inject
 

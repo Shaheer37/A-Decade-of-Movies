@@ -1,4 +1,4 @@
-package com.shaheer.adecadeofmovies.data.mapper
+package com.shaheer.adecadeofmovies.domain
 
 interface Mapper<L, R> {
     fun mapToLocal(remote: R): L
