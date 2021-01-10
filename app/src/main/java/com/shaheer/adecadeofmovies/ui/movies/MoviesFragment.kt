@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shaheer.adecadeofmovies.R
+import com.shaheer.adecadeofmovies.domain.models.Movie
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.Result
+import com.shaheer.adecadeofmovies.ui.movies.adapter.MovieClickListener
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MoviesAdapter
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MoviesItemSpacingDecoration
 import dagger.android.support.AndroidSupportInjection
@@ -19,12 +22,12 @@ import kotlinx.android.synthetic.main.fragment_movies.*
 import javax.inject.Inject
 
 
-class MoviesFragment : Fragment() {
+class MoviesFragment : Fragment(), MovieClickListener {
 
     @Inject lateinit var viewModel: MoviesViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
-    private val adapter = MoviesAdapter()
+    @Inject lateinit var adapter: MoviesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -52,10 +55,12 @@ class MoviesFragment : Fragment() {
     }
 
     private fun handleMoviesResult(result: Result<List<MovieListItem>>) = when(result){
-        is Result.Success -> {
-            adapter.submitList(result.data)
-        }
+        is Result.Success -> { adapter.submitList(result.data) }
         is Result.Error -> { result.exception.printStackTrace()}
         is Result.Loading -> {}
+    }
+
+    override fun onMovieClicked(movie: Movie) {
+        findNavController().navigate(MoviesFragmentDirections.actionMoviesToMoviesDetail(movie.id))
     }
 }

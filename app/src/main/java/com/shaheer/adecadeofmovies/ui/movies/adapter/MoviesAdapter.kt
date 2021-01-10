@@ -12,8 +12,11 @@ import com.shaheer.adecadeofmovies.ui.models.MovieListItemType
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.row_movie.*
 import kotlinx.android.synthetic.main.row_year.*
+import javax.inject.Inject
 
-class MoviesAdapter: ListAdapter<MovieListItem, MoviesAdapter.ItemViewHolder>(MoviesDiffCallback()) {
+class MoviesAdapter @Inject constructor(
+    private val movieClickListener: MovieClickListener
+): ListAdapter<MovieListItem, MoviesAdapter.ItemViewHolder>(MoviesDiffCallback()) {
     companion object{
         const val TYPE_YEAR = 1
         const val TYPE_MOVIE = 2
@@ -26,7 +29,7 @@ class MoviesAdapter: ListAdapter<MovieListItem, MoviesAdapter.ItemViewHolder>(Mo
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if(viewType == TYPE_YEAR) YearItemViewHolder(inflater.inflate(R.layout.row_year, parent, false))
-            else MovieItemViewHolder(inflater.inflate(R.layout.row_movie, parent, false))
+            else MovieItemViewHolder(inflater.inflate(R.layout.row_movie, parent, false), movieClickListener)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -37,11 +40,17 @@ class MoviesAdapter: ListAdapter<MovieListItem, MoviesAdapter.ItemViewHolder>(Mo
         abstract fun bind(item: MovieListItem)
     }
 
-    class MovieItemViewHolder(override val containerView: View): ItemViewHolder(containerView){
+    class MovieItemViewHolder(
+        override val containerView: View,
+        private val movieClickListener: MovieClickListener
+    ): ItemViewHolder(containerView){
         override fun bind(item: MovieListItem) {
             item.movie?.let {
                 tv_movie_title. text = it.title
                 rating_bar.rating = it.rating.toFloat()
+            }
+            itemView.setOnClickListener {
+                item.movie?.let { movieClickListener.onMovieClicked(it) }
             }
         }
     }

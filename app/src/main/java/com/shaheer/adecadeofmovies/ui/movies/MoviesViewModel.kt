@@ -10,6 +10,7 @@ import com.shaheer.adecadeofmovies.ui.base.BaseViewModel
 import com.shaheer.adecadeofmovies.ui.mapper.MovieListMapper
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.Result
+import com.shaheer.adecadeofmovies.ui.movies.adapter.MovieClickListener
 import java.lang.Exception
 import javax.inject.Inject
 
