@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorToolbar">#535353</color>
     <color name="colorRatingBarActivated">@android:color/white</color>
+
+    <color name="colorMovieDetailsText">@android:color/white</color>
 </resources>

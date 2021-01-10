@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
+import com.google.android.material.chip.Chip
 import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.domain.models.MovieDetails
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
@@ -72,16 +74,16 @@ class MoviesDetailFragment : Fragment() {
     }
 
     private fun configureLayout()
-        = if(isTablet) appbar.visibility = View.GONE
+        = if(isTablet) toolbar.visibility = View.GONE
         else {
-            appbar.visibility = View.VISIBLE
+            toolbar.visibility = View.VISIBLE
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         }
 
     private fun handleMoviesResult(result: Result<MovieDetails>) = when(result){
         is Result.Success -> {
             Timber.d(result.data.toString())
-            tv_name.text = result.data.title
+            setMovieLayout(result.data)
         }
         is Result.Error -> { result.exception.printStackTrace()}
         is Result.Loading -> {}
@@ -94,5 +96,30 @@ class MoviesDetailFragment : Fragment() {
         }
         is Result.Error -> { result.exception.printStackTrace()}
         is Result.Loading -> {}
+    }
+
+    private fun setMovieLayout(details: MovieDetails){
+        tv_name.text = details.title
+        rating_bar.rating = details.rating.toFloat()
+        if(details.genres.isNotEmpty()) {
+            details.genres.forEach {
+                val chip = Chip(requireContext())
+                chip.text = it
+                chip_group_genre.addView(chip)
+            }
+        }else {
+            tv_genre.visibility = View.GONE
+            chip_group_genre.visibility = View.GONE
+        }
+        if(details.cast.isNotEmpty()) {
+            details.cast.forEach {
+                val chip = Chip(requireContext())
+                chip.text = it
+                chip_group_cast.addView(chip)
+            }
+        }else {
+            tv_cast.visibility = View.GONE
+            chip_group_cast.visibility = View.GONE
+        }
     }
 }

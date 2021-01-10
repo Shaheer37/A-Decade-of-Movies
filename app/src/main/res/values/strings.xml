@@ -4,4 +4,6 @@
     <string name="search">Search</string>
 
     <string name="error">An Error occurred while loading data. Please check your network connectivity.</string>
+    <string name="genre">Genre</string>
+    <string name="cast">Cast</string>
 </resources>

@@ -1,6 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:toolbarStyle">@style/ActionBar</item>
+
+        <item name="chipIconTint">@color/chipIconTint</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -16,13 +22,13 @@
         <item name="android:progressTint">@color/colorRatingBarActivated</item>
     </style>
 
-    <style name="ActionBar" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
-<!--        <item name="android:background">@color/background</item>-->
+    <style name="ActionBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:background">@color/colorToolbar</item>
         <item name="theme">@style/ThemeOverlay.ActionBar</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
-    <style name="ThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
+    <style name="ThemeOverlay.ActionBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
 <!--        <item name="android:textColorPrimary">@color/textcolor</item>-->
     </style>
 </resources>
