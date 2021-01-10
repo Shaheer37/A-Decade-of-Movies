@@ -8,15 +8,18 @@ import com.shaheer.adecadeofmovies.domain.models.MoviesInAYear
 import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
 import com.shaheer.adecadeofmovies.ui.base.BaseViewModel
 import com.shaheer.adecadeofmovies.ui.mapper.MovieListMapper
+import com.shaheer.adecadeofmovies.ui.mapper.MovieSearchListMapper
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.Result
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MovieClickListener
+import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
 class MoviesViewModel @Inject constructor(
     private val moviesRepository: MoviesRepository,
-    private val movieListMapper: MovieListMapper
+    private val movieListMapper: MovieListMapper,
+    private val movieSearchListMapper: MovieSearchListMapper
 ) : BaseViewModel() {
 
     private var _movies = MutableLiveData<Result<List<MovieListItem>>>()
@@ -36,17 +39,11 @@ class MoviesViewModel @Inject constructor(
     fun searchMovies(query: String){
         val startTime = System.currentTimeMillis()
         val disposable = moviesRepository.getMoviesAgainstQuery(query)
-            .subscribe { moviesInYears, throwable ->
-                Log.d("MoviesViewModel","Duration :: ${System.currentTimeMillis() - startTime}")
-//                moviesInYears?.let{
-//                    it.forEach { moviesInAYear ->
-//                        Log.d("MoviesViewModel","Year :: ${moviesInAYear.year}")
-//                        moviesInAYear.movies.forEach { movie ->
-//                            Log.d("MoviesViewModel","-- Movie :: $movie")
-//                        }
-//                    }
-//                }
-                throwable?.printStackTrace()
+            .map { movieSearchListMapper.mapToLocal(it) }
+            .subscribe { movies, throwable ->
+                Timber.d("Duration :: ${System.currentTimeMillis() - startTime}")
+                movies?.let { _movies.value = Result.Success(movies) }
+                throwable?.let { _movies.value = Result.Error(Exception(it)) }
             }
         compositeDisposable.add(disposable)
     }

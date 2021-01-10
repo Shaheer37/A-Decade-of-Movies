@@ -20,6 +20,7 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 import javax.inject.Inject
 
 class MoviesRepositoryImpl @Inject constructor(
@@ -29,10 +30,6 @@ class MoviesRepositoryImpl @Inject constructor(
     private val moviesInAYearMapper: MoviesInAYearMapper,
     private val movieDetailsMapper: MovieDetailsMapper
 ): MoviesRepository {
-
-    private fun getMoviesInYearForQuerySingle() = Single.fromCallable {
-        database.moviesDao().getMoviesInYearsForQuery("")
-    }
 
     override fun getMovies(): Single<List<Movie>> {
         return database.moviesDao().getSortedMovies()
@@ -50,11 +47,10 @@ class MoviesRepositoryImpl @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getMoviesAgainstQuery(query: String): Single<List<MoviesInAYear>> {
-        return getMoviesInYearForQuerySingle()
-            .map { moviesInAYear ->
-                moviesInAYear.map{movieInAYear ->  moviesInAYearMapper.mapToRemote(movieInAYear)}
-            }
+    override fun getMoviesAgainstQuery(query: String): Single<List<Movie>> {
+        var query = query.replace(" ", "").toLowerCase(Locale.ROOT)
+        return database.moviesDao().getMoviesForQuery(query)
+            .map { it.map { movieEntity -> movieMapper.mapToRemote(movieEntity) } }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

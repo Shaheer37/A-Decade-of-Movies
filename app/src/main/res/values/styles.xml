@@ -16,4 +16,13 @@
         <item name="android:progressTint">@color/colorRatingBarActivated</item>
     </style>
 
+    <style name="ActionBar" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
+<!--        <item name="android:background">@color/background</item>-->
+        <item name="theme">@style/ThemeOverlay.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="ThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
+<!--        <item name="android:textColorPrimary">@color/textcolor</item>-->
+    </style>
 </resources>

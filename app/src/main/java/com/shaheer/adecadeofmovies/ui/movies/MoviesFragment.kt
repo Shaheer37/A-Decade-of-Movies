@@ -1,16 +1,17 @@
 package com.shaheer.adecadeofmovies.ui.movies
 
 import android.os.Bundle
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.domain.models.Movie
+import com.shaheer.adecadeofmovies.ui.base.BaseFragment
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.Result
@@ -20,11 +21,16 @@ import com.shaheer.adecadeofmovies.ui.movies.adapter.MoviesAdapter
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MoviesItemSpacingDecoration
 import com.shaheer.adecadeofmovies.utils.replaceFragment
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_movies.*
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class MoviesFragment : Fragment(), MovieClickListener {
+class MoviesFragment : BaseFragment(), MovieClickListener {
 
     @Inject lateinit var viewModel: MoviesViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
@@ -44,11 +50,14 @@ class MoviesFragment : Fragment(), MovieClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_movies, container, false)
+        val root = inflater.inflate(R.layout.fragment_movies, container, false)
+        return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setUpSearch()
 
         rv_movies.layoutManager = LinearLayoutManager(requireContext())
         rv_movies.adapter = adapter
@@ -67,5 +76,33 @@ class MoviesFragment : Fragment(), MovieClickListener {
     override fun onMovieClicked(movie: Movie) {
         if(isTablet) replaceFragment(MoviesDetailFragment.newInstance(movie.id), R.id.fragment_container)
         else findNavController().navigate(MoviesFragmentDirections.actionMoviesToMoviesDetail(movie.id))
+    }
+
+    private fun setUpSearch(){
+        toolbar.inflateMenu(R.menu.menu)
+        val searchView = toolbar.menu.findItem(R.id.action_search).actionView as SearchView
+        searchView.maxWidth = Integer.MAX_VALUE
+//        searchView.setOnCloseListener {
+//            viewModel.getMovies()
+//            true
+//        }
+        val disposable = Observable.create<String> {
+            searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    Timber.d("onQueryTextSubmit(query: $query")
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    Timber.d("onQueryTextChange(newText: $newText)")
+                    it.onNext(newText?:"")
+                    return true
+                }
+            })
+        }.debounce(500, TimeUnit.MILLISECONDS)
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.io())
+        .subscribe({viewModel.searchMovies(it)},{it.printStackTrace()})
+        compositeDisposable.add(disposable)
     }
 }

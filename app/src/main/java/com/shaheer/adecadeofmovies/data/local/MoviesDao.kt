@@ -28,24 +28,10 @@ interface MoviesDao {
     @Query("Select * from MovieEntity order by year desc, rating desc")
     fun getSortedMovies(): Single<List<MovieEntity>>
 
-    @Query("Select distinct year from MovieEntity order by year desc")
-    fun getDistinctYears(): List<Int>
-
     @Query("Select * from MovieEntity where trimmedTitle like '%'||:query||'%' order by year desc, rating desc")
-    fun getMoviesForQuery(query: String): List<MovieEntity>
+    fun getMoviesForQuery(query: String): Single<List<MovieEntity>>
 
-/*    @Transaction fun getMoviesInYearsForQuery(query: String, years: List<Int>? = null): Map<Int, List<MovieEntity>>{
-
-        var query = query.replace(" ", "").toLowerCase(Locale.ROOT)
-        val yearMap = mutableMapOf<Int, List<MovieEntity>>()
-        (years?:getDistinctYears()).forEach { year ->
-            val movies = getMoviesByYearForQuery(year, query)
-            if(movies.isNotEmpty()) yearMap[year] = movies
-        }
-        return yearMap
-    }*/
-
-    @Transaction
+/*    @Transaction
     fun getMoviesInYearsForQuery(query: String): List<MovieEntitiesInAYear>{
         var query = query.replace(" ", "").toLowerCase(Locale.ROOT)
         val movies = getMoviesForQuery(query)
@@ -69,7 +55,7 @@ interface MoviesDao {
             }
         }
         return yearList
-    }
+    }*/
 
     @Insert fun insertMovie(movie: MovieEntity): Long
 

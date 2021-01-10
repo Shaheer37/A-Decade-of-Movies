@@ -9,5 +9,5 @@ import io.reactivex.Single
 interface MoviesRepository {
     fun getMovies(): Single<List<Movie>>
     fun getMovieDetails(movieId: Int): Maybe<MovieDetails>
-    fun getMoviesAgainstQuery(query: String): Single<List<MoviesInAYear>>
+    fun getMoviesAgainstQuery(query: String): Single<List<Movie>>
 }
