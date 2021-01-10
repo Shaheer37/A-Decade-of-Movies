@@ -2,4 +2,6 @@
     <string name="app_name">A Decade of Movies</string>
 
     <string name="search">Search</string>
+
+    <string name="error">An Error occurred while loading data. Please check your network connectivity.</string>
 </resources>

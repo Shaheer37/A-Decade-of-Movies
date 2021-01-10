@@ -1,19 +1,13 @@
 package com.shaheer.adecadeofmovies.data
 
 
-import android.util.Log
-import com.shaheer.adecadeofmovies.data.getmovies.GetMoviesData
-import com.shaheer.adecadeofmovies.data.getmovies.models.Movies
+import com.shaheer.adecadeofmovies.data.remote.getmovies.GetMoviesData
 import com.shaheer.adecadeofmovies.data.local.MoviesDatabase
-import com.shaheer.adecadeofmovies.data.local.entities.MovieEntity
-import com.shaheer.adecadeofmovies.data.local.entities.MovieWithActorsAndGenres
-import com.shaheer.adecadeofmovies.data.local.models.MovieEntitiesInAYear
 import com.shaheer.adecadeofmovies.data.mapper.MovieDetailsMapper
 import com.shaheer.adecadeofmovies.data.mapper.MovieMapper
 import com.shaheer.adecadeofmovies.data.mapper.MoviesInAYearMapper
 import com.shaheer.adecadeofmovies.domain.models.Movie
 import com.shaheer.adecadeofmovies.domain.models.MovieDetails
-import com.shaheer.adecadeofmovies.domain.models.MoviesInAYear
 import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
 import io.reactivex.Completable
 import io.reactivex.Maybe

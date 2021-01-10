@@ -1,9 +1,8 @@
-package com.shaheer.adecadeofmovies.data.getmovies
+package com.shaheer.adecadeofmovies.data.remote.getmovies
 
 import android.content.Context
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.shaheer.adecadeofmovies.data.getmovies.models.Movies
+import com.shaheer.adecadeofmovies.data.remote.getmovies.models.Movies
 import com.shaheer.adecadeofmovies.ui.injection.qualifiers.ApplicationContext
 import io.reactivex.Single
 import java.io.IOException

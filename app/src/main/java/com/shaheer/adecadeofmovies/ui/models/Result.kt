@@ -20,3 +20,6 @@ sealed class Result<out R> {
  */
 val Result<*>.succeeded
     get() = this is Result.Success && data != null
+
+val Result<*>.data
+    get() = if(this is Result.Success && data != null) data else null

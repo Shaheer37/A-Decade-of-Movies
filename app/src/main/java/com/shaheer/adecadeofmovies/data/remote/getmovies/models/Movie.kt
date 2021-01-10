@@ -1,4 +1,4 @@
-package com.shaheer.adecadeofmovies.data.getmovies.models
+package com.shaheer.adecadeofmovies.data.remote.getmovies.models
 
 data class Movie(
     val title: String,

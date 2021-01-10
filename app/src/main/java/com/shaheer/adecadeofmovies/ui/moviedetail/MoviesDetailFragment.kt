@@ -14,6 +14,7 @@ import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.domain.models.MovieDetails
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
+import com.shaheer.adecadeofmovies.ui.models.PhotoListItem
 import com.shaheer.adecadeofmovies.ui.models.Result
 import com.shaheer.adecadeofmovies.ui.movies.MoviesViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -25,6 +26,8 @@ class MoviesDetailFragment : Fragment() {
 
     @Inject lateinit var viewModel: MoviesDetailViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
+
+    @Inject lateinit var adapter: PhotoAdapter
 
     private val args: MoviesDetailFragmentArgs by navArgs()
 
@@ -60,7 +63,11 @@ class MoviesDetailFragment : Fragment() {
 
         configureLayout()
 
+        rv_photos.adapter = adapter
+
         viewModel.movies.observe(viewLifecycleOwner, Observer { handleMoviesResult(it) })
+        viewModel.photos.observe(viewLifecycleOwner, Observer { handlePhotoResult(it)})
+
         viewModel.getMovieDetails(args.movieId)
     }
 
@@ -75,6 +82,15 @@ class MoviesDetailFragment : Fragment() {
         is Result.Success -> {
             Timber.d(result.data.toString())
             tv_name.text = result.data.title
+        }
+        is Result.Error -> { result.exception.printStackTrace()}
+        is Result.Loading -> {}
+    }
+
+    private fun handlePhotoResult(result: Result<List<PhotoListItem>>) = when(result){
+        is Result.Success -> {
+            Timber.d(result.data.toString())
+            adapter.submitList(result.data)
         }
         is Result.Error -> { result.exception.printStackTrace()}
         is Result.Loading -> {}

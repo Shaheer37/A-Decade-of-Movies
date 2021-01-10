@@ -1,11 +1,10 @@
 package com.shaheer.adecadeofmovies.data.local
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.shaheer.adecadeofmovies.data.getmovies.models.Movie
+import com.shaheer.adecadeofmovies.data.remote.getmovies.models.Movie
 import com.shaheer.adecadeofmovies.data.local.entities.Actor
 import com.shaheer.adecadeofmovies.data.local.entities.Genre
 import com.shaheer.adecadeofmovies.data.local.entities.MovieEntity

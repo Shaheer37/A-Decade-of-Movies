@@ -19,6 +19,7 @@ import com.shaheer.adecadeofmovies.ui.moviedetail.MoviesDetailFragment
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MovieClickListener
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MoviesAdapter
 import com.shaheer.adecadeofmovies.ui.movies.adapter.MoviesItemSpacingDecoration
+import com.shaheer.adecadeofmovies.utils.hideKeyboard
 import com.shaheer.adecadeofmovies.utils.replaceFragment
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
@@ -74,6 +75,7 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
     }
 
     override fun onMovieClicked(movie: Movie) {
+        requireActivity().currentFocus?.hideKeyboard()
         if(isTablet) replaceFragment(MoviesDetailFragment.newInstance(movie.id), R.id.fragment_container)
         else findNavController().navigate(MoviesFragmentDirections.actionMoviesToMoviesDetail(movie.id))
     }
