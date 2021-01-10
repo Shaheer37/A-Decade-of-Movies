@@ -34,7 +34,7 @@ interface MoviesDao {
     @Query("Select * from MovieEntity where trimmedTitle like '%'||:query||'%' order by year desc, rating desc")
     fun getMoviesForQuery(query: String): List<MovieEntity>
 
-    @Transaction fun getMoviesInYearsForQuery(query: String, years: List<Int>? = null): Map<Int, List<MovieEntity>>{
+/*    @Transaction fun getMoviesInYearsForQuery(query: String, years: List<Int>? = null): Map<Int, List<MovieEntity>>{
 
         var query = query.replace(" ", "").toLowerCase(Locale.ROOT)
         val yearMap = mutableMapOf<Int, List<MovieEntity>>()
@@ -43,12 +43,13 @@ interface MoviesDao {
             if(movies.isNotEmpty()) yearMap[year] = movies
         }
         return yearMap
-    }
+    }*/
 
-    @Transaction fun getMoviesInYearsForQuerySecond(query: String): List<MovieEntitiesInAYear>{
+    @Transaction
+    fun getMoviesInYearsForQuery(query: String): List<MovieEntitiesInAYear>{
         var query = query.replace(" ", "").toLowerCase(Locale.ROOT)
-        val yearList = mutableListOf<MovieEntitiesInAYear>()
         val movies = getMoviesForQuery(query)
+        val yearList = mutableListOf<MovieEntitiesInAYear>()
         var year = 0
         var index = 0
         movies.forEach { movie ->

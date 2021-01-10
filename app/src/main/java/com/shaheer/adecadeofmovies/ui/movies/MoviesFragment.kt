@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.domain.models.Movie
+import com.shaheer.adecadeofmovies.domain.models.MoviesInAYear
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
 import com.shaheer.adecadeofmovies.ui.models.Result
 import dagger.android.support.AndroidSupportInjection
@@ -42,14 +43,11 @@ class MoviesFragment : Fragment() {
 
         viewModel.movies.observe(viewLifecycleOwner, Observer { handleMoviesResult(it) })
         viewModel.getMovies()
-        viewModel.searchMovies("ten")
-        viewModel.searchMovies("the")
-        viewModel.searchMovies("night")
     }
 
-    private fun handleMoviesResult(result: Result<List<Movie>>) = when(result){
+    private fun handleMoviesResult(result: Result<List<MoviesInAYear>>) = when(result){
         is Result.Success -> {
-//            result.data.forEach { Log.d("MoviesFragment", it.toString()) }
+            result.data.forEach { Log.d("MoviesFragment", it.toString()) }
         }
         is Result.Error -> { result.exception.printStackTrace()}
         is Result.Loading -> {}

@@ -6,6 +6,6 @@ import com.shaheer.adecadeofmovies.domain.models.MoviesInAYear
 import io.reactivex.Single
 
 interface MoviesRepository {
-    fun getMovies(): Single<List<Movie>>
+    fun getMovies(): Single<List<MoviesInAYear>>
     fun getMoviesAgainstQuery(query: String): Single<List<MoviesInAYear>>
 }

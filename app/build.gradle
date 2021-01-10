@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.shaheer.adecadeofmovies"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         multiDexEnabled true
         versionCode 1

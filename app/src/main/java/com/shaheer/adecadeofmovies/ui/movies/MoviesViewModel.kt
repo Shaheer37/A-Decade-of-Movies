@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shaheer.adecadeofmovies.domain.models.Movie
+import com.shaheer.adecadeofmovies.domain.models.MoviesInAYear
 import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
 import com.shaheer.adecadeofmovies.ui.base.BaseViewModel
 import com.shaheer.adecadeofmovies.ui.models.Result
@@ -14,8 +15,8 @@ class MoviesViewModel @Inject constructor(
     private val moviesRepository: MoviesRepository
 ) : BaseViewModel() {
 
-    private var _movies = MutableLiveData<Result<List<Movie>>>()
-    val movies: LiveData<Result<List<Movie>>> = _movies
+    private var _movies = MutableLiveData<Result<List<MoviesInAYear>>>()
+    val movies: LiveData<Result<List<MoviesInAYear>>> = _movies
 
     fun getMovies(){
         val disposable = moviesRepository.getMovies()
