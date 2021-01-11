@@ -10,6 +10,7 @@ import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.domain.models.Movie
 import com.shaheer.adecadeofmovies.ui.base.BaseFragment
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
+import com.shaheer.adecadeofmovies.ui.injection.qualifiers.MoviesFragmentQualifier
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.Result
 import com.shaheer.adecadeofmovies.ui.moviedetail.MoviesDetailFragment
@@ -29,7 +30,9 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
     @Inject lateinit var viewModel: MoviesViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
-    private val adapter = MoviesAdapter(this)
+    @Inject
+    @MoviesFragmentQualifier
+    lateinit var adapter: MoviesAdapter
 
     private val isMasterDetail: Boolean by lazy { resources.getBoolean(R.bool.is_md) }
 

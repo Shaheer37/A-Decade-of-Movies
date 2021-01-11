@@ -4,6 +4,8 @@ import android.content.Context
 import com.shaheer.adecadeofmovies.ui.App
 import com.shaheer.adecadeofmovies.ui.MainActivity
 import com.shaheer.adecadeofmovies.ui.injection.qualifiers.ApplicationContext
+import com.shaheer.adecadeofmovies.ui.injection.subcomponent.MovieSearchFragmentSubComponent
+import com.shaheer.adecadeofmovies.ui.injection.subcomponent.MoviesFragmentSubComponent
 import com.shaheer.adecadeofmovies.ui.moviedetail.MoviesDetailFragment
 import com.shaheer.adecadeofmovies.ui.movies.MoviesFragment
 import com.shaheer.adecadeofmovies.ui.moviesearch.MovieSearchFragment
@@ -14,7 +16,7 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 
-@Module()
+@Module(subcomponents = [MoviesFragmentSubComponent::class, MovieSearchFragmentSubComponent::class])
 interface UiModule {
 
     @Module
@@ -25,11 +27,15 @@ interface UiModule {
     @ApplicationContext
     fun bindsContext(app: App): Context
 
-    @ContributesAndroidInjector
-    fun contributesMovieSearchFragment(): MovieSearchFragment
+    @Binds
+    @IntoMap
+    @ClassKey(MovieSearchFragment::class)
+    fun bindMovieSearchAndroidInjectorFactory(factory: MovieSearchFragmentSubComponent.Factory): AndroidInjector.Factory<*>
 
-    @ContributesAndroidInjector
-    fun contributesMoviesFragment(): MoviesFragment
+    @Binds
+    @IntoMap
+    @ClassKey(MoviesFragment::class)
+    fun bindMoviesAndroidInjectorFactory(factory: MoviesFragmentSubComponent.Factory): AndroidInjector.Factory<*>
 
     @ContributesAndroidInjector
     fun contributesMoviesDetailFragment(): MoviesDetailFragment
