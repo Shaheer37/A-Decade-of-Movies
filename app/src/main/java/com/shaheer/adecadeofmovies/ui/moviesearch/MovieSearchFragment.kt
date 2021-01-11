@@ -1,4 +1,4 @@
-package com.shaheer.adecadeofmovies.ui.movies
+package com.shaheer.adecadeofmovies.ui.moviesearch
 
 import android.os.Bundle
 import android.view.*
@@ -17,6 +17,7 @@ import com.shaheer.adecadeofmovies.ui.moviedetail.MoviesDetailFragment
 import com.shaheer.adecadeofmovies.ui.movieadapter.MovieClickListener
 import com.shaheer.adecadeofmovies.ui.movieadapter.MoviesAdapter
 import com.shaheer.adecadeofmovies.ui.movieadapter.MoviesItemSpacingDecoration
+import com.shaheer.adecadeofmovies.ui.movies.MoviesFragmentDirections
 import com.shaheer.adecadeofmovies.utils.hideKeyboard
 import com.shaheer.adecadeofmovies.utils.replaceFragment
 import dagger.android.support.AndroidSupportInjection
@@ -28,9 +29,9 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class MoviesFragment : BaseFragment(), MovieClickListener {
+class MovieSearchFragment : BaseFragment(), MovieClickListener {
 
-    @Inject lateinit var viewModel: MoviesViewModel
+    @Inject lateinit var viewModel: MovieSearchViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
     val adapter = MoviesAdapter(this)
@@ -41,15 +42,14 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(viewModelStore, viewModelFactory).get(MoviesViewModel::class.java)
+        viewModel = ViewModelProvider(viewModelStore, viewModelFactory).get(MovieSearchViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_movies, container, false)
-        return root
+        return inflater.inflate(R.layout.fragment_movie_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,8 +62,7 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
         rv_movies.addItemDecoration(MoviesItemSpacingDecoration())
 
         viewModel.movies.observe(viewLifecycleOwner, Observer { handleMoviesResult(it) })
-        viewModel.movie.observe(viewLifecycleOwner, Observer { onMovieClicked(it) })
-        viewModel.getMovies()
+        viewModel.searchMovies()
     }
 
     private fun handleMoviesResult(result: Result<List<MovieListItem>>) = when(result){
@@ -80,9 +79,25 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
 
     private fun setUpSearch(){
         toolbar.inflateMenu(R.menu.menu)
-        toolbar.menu.findItem(R.id.action_search).setOnMenuItemClickListener {
-            findNavController().navigate(MoviesFragmentDirections.actionMoviesToMovieSearch())
-            true
-        }
+/*        val searchView = toolbar.menu.findItem(R.id.action_search).actionView as SearchView
+        searchView.maxWidth = Integer.MAX_VALUE
+        val disposable = Observable.create<String> {
+            searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    Timber.d("onQueryTextSubmit(query: $query")
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    Timber.d("onQueryTextChange(newText: $newText)")
+                    it.onNext(newText?:"")
+                    return true
+                }
+            })
+        }.debounce(500, TimeUnit.MILLISECONDS)
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.io())
+        .subscribe({viewModel.searchMovies(it)},{it.printStackTrace()})
+        compositeDisposable.add(disposable)*/
     }
 }

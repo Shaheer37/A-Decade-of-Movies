@@ -9,7 +9,8 @@ import javax.inject.Inject
 
 class MovieListMapper @Inject constructor(): Mapper<List<MovieListItem>, List<Movie>> {
     override fun mapToLocal(remote: List<Movie>): List<MovieListItem> {
-        val movieItemList = mutableListOf<MovieListItem>()
+        return remote.map { movie -> MovieListItem(MovieListItemType.Movie, movie.year, movie) }
+        /*val movieItemList = mutableListOf<MovieListItem>()
         var year = 0
         remote.forEach { movie ->
             when {
@@ -23,7 +24,7 @@ class MovieListMapper @Inject constructor(): Mapper<List<MovieListItem>, List<Mo
                 }
             }
         }
-        return movieItemList
+        return movieItemList*/
     }
 
     override fun mapToRemote(local: List<MovieListItem>): List<Movie> {

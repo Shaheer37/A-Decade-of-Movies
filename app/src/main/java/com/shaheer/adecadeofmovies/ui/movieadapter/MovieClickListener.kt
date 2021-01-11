@@ -1,4 +1,4 @@
-package com.shaheer.adecadeofmovies.ui.movies.adapter
+package com.shaheer.adecadeofmovies.ui.movieadapter
 
 import com.shaheer.adecadeofmovies.domain.models.Movie
 

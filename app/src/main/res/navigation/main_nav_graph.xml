@@ -13,6 +13,18 @@
         <action
             android:id="@+id/action_movies_to_moviesDetail"
             app:destination="@id/moviesDetailFragment" />
+        <action
+            android:id="@+id/action_movies_to_movieSearch"
+            app:destination="@id/movieSearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieSearchFragment"
+        android:name="com.shaheer.adecadeofmovies.ui.moviesearch.MovieSearchFragment"
+        android:label="fragment_movie_search"
+        tools:layout="@layout/fragment_movie_search" >
+        <action
+            android:id="@+id/action_movies_to_moviesDetail"
+            app:destination="@id/moviesDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/moviesDetailFragment"

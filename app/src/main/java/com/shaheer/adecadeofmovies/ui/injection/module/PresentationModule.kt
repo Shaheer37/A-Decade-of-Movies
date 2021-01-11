@@ -6,6 +6,7 @@ import com.shaheer.adecadeofmovies.ui.MainViewModel
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
 import com.shaheer.adecadeofmovies.ui.moviedetail.MoviesDetailViewModel
 import com.shaheer.adecadeofmovies.ui.movies.MoviesViewModel
+import com.shaheer.adecadeofmovies.ui.moviesearch.MovieSearchViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -18,6 +19,11 @@ interface PresentationModule{
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     fun bindsMainViewModel(viewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MovieSearchViewModel::class)
+    fun bindsMovieSearchViewModel(viewModel: MovieSearchViewModel): ViewModel
 
     @Binds
     @IntoMap

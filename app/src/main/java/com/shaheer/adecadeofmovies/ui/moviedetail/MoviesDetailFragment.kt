@@ -1,7 +1,6 @@
 package com.shaheer.adecadeofmovies.ui.moviedetail
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +9,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
 import com.google.android.material.chip.Chip
 import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.domain.models.MovieDetails
 import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
-import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.PhotoListItem
 import com.shaheer.adecadeofmovies.ui.models.Result
-import com.shaheer.adecadeofmovies.ui.movies.MoviesViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_movies_detail.*
 import timber.log.Timber
