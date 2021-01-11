@@ -29,7 +29,7 @@ class MoviesDetailFragment : Fragment() {
 
     private val args: MoviesDetailFragmentArgs by navArgs()
 
-    private val isTablet: Boolean by lazy { resources.getBoolean(R.bool.is_tablet) }
+    private val isMasterDetail: Boolean by lazy { resources.getBoolean(R.bool.is_md) }
 
     companion object {
         @JvmStatic
@@ -70,7 +70,7 @@ class MoviesDetailFragment : Fragment() {
     }
 
     private fun configureLayout()
-        = if(isTablet) toolbar.visibility = View.GONE
+        = if(isMasterDetail) toolbar.visibility = View.GONE
         else {
             toolbar.visibility = View.VISIBLE
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }

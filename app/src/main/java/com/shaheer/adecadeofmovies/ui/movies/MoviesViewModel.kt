@@ -31,17 +31,14 @@ class MoviesViewModel @Inject constructor(
         val disposable = moviesRepository.getMovies()
             .map { movieListMapper.mapToLocal(it) }
             .subscribe { movies, throwable ->
-                movies?.let {
-                    _movies.value = Result.Success(movies)
-                    getFirstMovieToDisplay()
-                }
+                movies?.let { _movies.value = Result.Success(movies) }
                 throwable?.let { _movies.value = Result.Error(Exception(it)) }
             }
         _movies.value = Result.Loading
         compositeDisposable.add(disposable)
     }
 
-    private fun getFirstMovieToDisplay(){
+    fun getFirstMovieToDisplay(){
         try {
             _movie.value = (_movies.value?.data as? List<MovieListItem>)
                 ?.first { it.type == MovieListItemType.Movie }?.movie

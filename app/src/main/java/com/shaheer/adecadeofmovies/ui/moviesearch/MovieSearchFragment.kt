@@ -2,7 +2,6 @@ package com.shaheer.adecadeofmovies.ui.moviesearch
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -21,11 +20,9 @@ import com.shaheer.adecadeofmovies.ui.movies.MoviesFragmentDirections
 import com.shaheer.adecadeofmovies.utils.hideKeyboard
 import com.shaheer.adecadeofmovies.utils.replaceFragment
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_movies.*
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
+import kotlinx.android.synthetic.main.fragment_movies.toolbar
+import kotlinx.android.synthetic.main.fragment_movies_detail.*
 import javax.inject.Inject
 
 
@@ -34,9 +31,9 @@ class MovieSearchFragment : BaseFragment(), MovieClickListener {
     @Inject lateinit var viewModel: MovieSearchViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
-    val adapter = MoviesAdapter(this)
+    private val adapter = MoviesAdapter(this)
 
-    private val isTablet: Boolean by lazy { resources.getBoolean(R.bool.is_tablet) }
+    private val isMasterDetail: Boolean by lazy { resources.getBoolean(R.bool.is_md) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -55,6 +52,7 @@ class MovieSearchFragment : BaseFragment(), MovieClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         setUpSearch()
 
         rv_movies.layoutManager = LinearLayoutManager(requireContext())
@@ -73,12 +71,11 @@ class MovieSearchFragment : BaseFragment(), MovieClickListener {
 
     override fun onMovieClicked(movie: Movie) {
         requireActivity().currentFocus?.hideKeyboard()
-        if(isTablet) replaceFragment(MoviesDetailFragment.newInstance(movie.id), R.id.fragment_container)
+        if(isMasterDetail) replaceFragment(MoviesDetailFragment.newInstance(movie.id), R.id.fragment_container)
         else findNavController().navigate(MoviesFragmentDirections.actionMoviesToMoviesDetail(movie.id))
     }
 
     private fun setUpSearch(){
-        toolbar.inflateMenu(R.menu.menu)
 /*        val searchView = toolbar.menu.findItem(R.id.action_search).actionView as SearchView
         searchView.maxWidth = Integer.MAX_VALUE
         val disposable = Observable.create<String> {
