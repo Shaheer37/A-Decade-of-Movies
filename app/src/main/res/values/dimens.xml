@@ -10,6 +10,8 @@
     <dimen name="item_message_text_padding">16dp</dimen>
     <dimen name="item_message_text_size">16sp</dimen>
 
+    <dimen name="search_et_padding_end">8dp</dimen>
+
     <dimen name="movies_detail_text_size">16sp</dimen>
     <dimen name="movies_detail_title_text_size">22sp</dimen>
     <dimen name="movies_detail_margin_vertical">10dp</dimen>

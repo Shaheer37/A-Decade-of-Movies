@@ -25,9 +25,26 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
             style="@style/ActionBar"
-            app:title="@string/app_name"/>
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/rv_movies"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:elevation="@dimen/toolbar_elevation">
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search"
+                android:imeOptions="actionSearch"
+                android:inputType="textNoSuggestions"
+                android:selectAllOnFocus="true"
+                android:layout_marginEnd="@dimen/search_et_padding_end"
+                android:background="@android:color/transparent"
+                />
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView

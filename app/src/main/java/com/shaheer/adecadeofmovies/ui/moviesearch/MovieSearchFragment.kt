@@ -1,7 +1,10 @@
 package com.shaheer.adecadeofmovies.ui.moviesearch
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.*
+import android.view.inputmethod.EditorInfo
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -17,12 +20,18 @@ import com.shaheer.adecadeofmovies.ui.movieadapter.MovieClickListener
 import com.shaheer.adecadeofmovies.ui.movieadapter.MoviesAdapter
 import com.shaheer.adecadeofmovies.ui.movieadapter.MoviesItemSpacingDecoration
 import com.shaheer.adecadeofmovies.ui.movies.MoviesFragmentDirections
+import com.shaheer.adecadeofmovies.utils.hasFragments
 import com.shaheer.adecadeofmovies.utils.hideKeyboard
 import com.shaheer.adecadeofmovies.utils.replaceFragment
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_movie_search.*
 import kotlinx.android.synthetic.main.fragment_movies.*
+import kotlinx.android.synthetic.main.fragment_movies.rv_movies
 import kotlinx.android.synthetic.main.fragment_movies.toolbar
 import kotlinx.android.synthetic.main.fragment_movies_detail.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -60,13 +69,26 @@ class MovieSearchFragment : BaseFragment(), MovieClickListener {
         rv_movies.addItemDecoration(MoviesItemSpacingDecoration())
 
         viewModel.movies.observe(viewLifecycleOwner, Observer { handleMoviesResult(it) })
+        viewModel.movie.observe(viewLifecycleOwner, Observer { onMovieClicked(it) })
         viewModel.searchMovies()
     }
 
     private fun handleMoviesResult(result: Result<List<MovieListItem>>) = when(result){
-        is Result.Success -> { adapter.submitList(result.data) }
+        is Result.Success -> { showMovies(result.data) }
         is Result.Error -> { result.exception.printStackTrace()}
         is Result.Loading -> {}
+    }
+
+    private fun showMovies(movieItems: List<MovieListItem>){
+        adapter.submitList(movieItems){
+            showFirstItemIfMasterDetail()
+        }
+    }
+
+    private fun showFirstItemIfMasterDetail(){
+        if(isMasterDetail && !childFragmentManager.hasFragments()){
+            viewModel.getFirstMovieToDisplay()
+        }
     }
 
     override fun onMovieClicked(movie: Movie) {
@@ -76,25 +98,21 @@ class MovieSearchFragment : BaseFragment(), MovieClickListener {
     }
 
     private fun setUpSearch(){
-/*        val searchView = toolbar.menu.findItem(R.id.action_search).actionView as SearchView
-        searchView.maxWidth = Integer.MAX_VALUE
+        et_search.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO
+                || actionId == EditorInfo.IME_ACTION_SEARCH) {
+                requireActivity().currentFocus?.hideKeyboard()
+                true
+            } else false
+        }
         val disposable = Observable.create<String> {
-            searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    Timber.d("onQueryTextSubmit(query: $query")
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    Timber.d("onQueryTextChange(newText: $newText)")
-                    it.onNext(newText?:"")
-                    return true
-                }
-            })
+            et_search.addTextChangedListener { text: Editable? ->
+                it.onNext(text?.toString()?:"")
+            }
         }.debounce(500, TimeUnit.MILLISECONDS)
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
         .subscribe({viewModel.searchMovies(it)},{it.printStackTrace()})
-        compositeDisposable.add(disposable)*/
+        compositeDisposable.add(disposable)
     }
 }
