@@ -30,7 +30,7 @@ class MoviesViewModel @Inject constructor(
             .subscribe { movies, throwable ->
                 movies?.let {
                     _movies.value = if(movies.isNotEmpty()) Result.Success(movies)
-                        else Result.Success(listOf(MovieListItem(MovieListItemType.Message, R.string.no_movies)))
+                        else Result.Success(listOf(MovieListItem(MovieListItemType.Message, message = R.string.no_movies)))
                 }
                 throwable?.let { _movies.value = Result.Error(it, listOf(MovieListItem(MovieListItemType.Message))) }
             }

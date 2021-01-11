@@ -5,6 +5,7 @@
 
     <string name="error">An error occurred while loading data. Maybe check your network connectivity, then try again.</string>
     <string name="no_movies">There are no movie records available at the moment. Please try again later.</string>
+    <string name="no_movies_found">No movies were found against your search query.</string>
     <string name="genre">Genre</string>
     <string name="cast">Cast</string>
 </resources>

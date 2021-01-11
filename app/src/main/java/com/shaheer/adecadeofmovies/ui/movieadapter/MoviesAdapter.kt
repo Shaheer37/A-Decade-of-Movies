@@ -23,12 +23,14 @@ class MoviesAdapter @Inject constructor(
         const val TYPE_YEAR = 1
         const val TYPE_MOVIE = 2
         const val TYPE_MESSAGE = 3
+        const val TYPE_LOADING = 4
     }
 
     override fun getItemViewType(position: Int): Int {
         return when(getItem(position).type){
             MovieListItemType.Year -> TYPE_YEAR
             MovieListItemType.Movie -> TYPE_MOVIE
+            MovieListItemType.Loading -> TYPE_LOADING
             else -> TYPE_MESSAGE
         }
     }
@@ -37,6 +39,7 @@ class MoviesAdapter @Inject constructor(
         return when(viewType){
             TYPE_YEAR -> YearItemViewHolder(inflater.inflate(R.layout.row_year, parent, false))
             TYPE_MOVIE -> MovieItemViewHolder(inflater.inflate(R.layout.row_movie, parent, false), movieClickListener)
+            TYPE_LOADING -> LoadingItemViewHolder(inflater.inflate(R.layout.row_loading, parent, false))
             else -> MessageItemViewHolder(inflater.inflate(R.layout.row_message, parent, false))
         }
     }
@@ -74,6 +77,9 @@ class MoviesAdapter @Inject constructor(
         override fun bind(item: MovieListItem) {
             tv_message.text = itemView.context.getString(item.message?:R.string.error)
         }
+    }
+    class LoadingItemViewHolder(override val containerView: View): ItemViewHolder(containerView){
+        override fun bind(item: MovieListItem) {}
     }
 }
 class MoviesDiffCallback : DiffUtil.ItemCallback<MovieListItem>() {

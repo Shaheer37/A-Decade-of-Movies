@@ -6,6 +6,7 @@
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:toolbarStyle">@style/ActionBar</item>
         <item name="chipIconTint">@color/chipIconTint</item>
+        <item name="android:indeterminateTint">@color/movies_update_progress_tint</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -26,6 +26,7 @@ import com.shaheer.adecadeofmovies.utils.hideKeyboard
 import com.shaheer.adecadeofmovies.utils.replaceFragment
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_movie_search.*
 import kotlinx.android.synthetic.main.fragment_movies.*
@@ -72,14 +73,19 @@ class MovieSearchFragment : BaseFragment(), MovieClickListener {
         rv_movies.addItemDecoration(MoviesItemSpacingDecoration())
 
         viewModel.movies.observe(viewLifecycleOwner, Observer { handleMoviesResult(it) })
-        viewModel.movie.observe(viewLifecycleOwner, Observer { onMovieClicked(it) })
+        viewModel.movie.observe(viewLifecycleOwner, Observer { it?.let { onMovieClicked(it) } })
         viewModel.searchMovies()
     }
 
     private fun handleMoviesResult(result: Result<List<MovieListItem>>) = when(result){
-        is Result.Success -> { showMovies(result.data) }
-        is Result.Error -> { result.throwable.printStackTrace()}
-        is Result.Loading -> {}
+        is Result.Success -> {
+            showMovies(result.data)
+        }
+        is Result.Error -> {
+            result.data?.let { showMovies(it) }
+            result.throwable.printStackTrace()
+        }
+        is Result.Loading -> {result.data?.let { showMovies(it) }}
     }
 
     private fun showMovies(movieItems: List<MovieListItem>){
@@ -114,7 +120,7 @@ class MovieSearchFragment : BaseFragment(), MovieClickListener {
             }
         }.debounce(500, TimeUnit.MILLISECONDS)
         .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe({viewModel.searchMovies(it)},{it.printStackTrace()})
         compositeDisposable.add(disposable)
     }

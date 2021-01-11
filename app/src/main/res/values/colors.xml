@@ -10,4 +10,6 @@
 
     <color name="chipIconTint">@android:color/darker_gray</color>
 
+    <color name="movies_update_progress_tint">@android:color/black</color>
+
 </resources>

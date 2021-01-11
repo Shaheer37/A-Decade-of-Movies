@@ -4,4 +4,6 @@
     <color name="colorRatingBarActivated">@android:color/white</color>
 
     <color name="colorMovieDetailsText">@android:color/white</color>
+
+    <color name="movies_update_progress_tint">#B8B8B8</color>
 </resources>
