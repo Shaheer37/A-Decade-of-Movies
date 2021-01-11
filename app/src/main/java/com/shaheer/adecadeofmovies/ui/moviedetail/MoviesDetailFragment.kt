@@ -90,8 +90,11 @@ class MoviesDetailFragment : Fragment() {
             Timber.d(result.data.toString())
             adapter.submitList(result.data)
         }
-        is Result.Error -> { result.throwable.printStackTrace()}
-        is Result.Loading -> {}
+        is Result.Error -> {
+            result.data?.let { adapter.submitList(it) }
+            result.throwable.printStackTrace()
+        }
+        is Result.Loading -> { result.data?.let { adapter.submitList(it) } }
     }
 
     private fun setMovieLayout(details: MovieDetails){

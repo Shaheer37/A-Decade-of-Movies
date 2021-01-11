@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">@android:color/black</color>
     <color name="colorAccent">@android:color/white</color>
     <color name="colorToolbar">#B8B8B8</color>
+    <color name="colorAppbar">@android:color/white</color>
+    <color name="colorRv">@android:color/white</color>
     <color name="colorRatingBarActivated">@android:color/black</color>
 
     <color name="colorMovieDetailsText">@android:color/black</color>

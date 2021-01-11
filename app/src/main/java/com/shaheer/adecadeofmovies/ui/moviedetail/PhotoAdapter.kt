@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,6 +12,7 @@ import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.PhotoListItem
 import com.shaheer.adecadeofmovies.ui.models.PhotoListItemType
+import com.shaheer.adecadeofmovies.ui.movieadapter.MoviesAdapter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.row_message.*
 import kotlinx.android.synthetic.main.row_photo.*
@@ -22,23 +24,46 @@ class PhotoAdapter @Inject constructor(
     companion object{
         const val TYPE_PHOTO = 1
         const val TYPE_ERROR = 2
+        const val TYPE_LOADING = 3
+
+        const val SPAN_SIZE_DEFAULT = 1
+        const val SPAN_SIZE_FULL_WIDTH = 2
+    }
+
+    private val spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
+        override fun getSpanSize(position: Int): Int {
+            val viewType = getItem(position)?.type?: return SPAN_SIZE_DEFAULT
+            return when (viewType) {
+                PhotoListItemType.Message, PhotoListItemType.Loading -> SPAN_SIZE_FULL_WIDTH
+                else -> SPAN_SIZE_DEFAULT
+            }
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
         super.getItemViewType(position)
         return when(getItem(position).type){
             PhotoListItemType.Photo -> TYPE_PHOTO
+            PhotoListItemType.Loading -> TYPE_LOADING
             else -> TYPE_ERROR
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return if(viewType == TYPE_PHOTO) PhotoViewHolder(inflater.inflate(R.layout.row_photo, parent, false))
-        else MessageViewHolder(inflater.inflate(R.layout.row_message, parent, false))
+        return when(viewType){
+            TYPE_PHOTO -> PhotoViewHolder(inflater.inflate(R.layout.row_photo, parent, false))
+            TYPE_LOADING -> LoadingItemViewHolder(inflater.inflate(R.layout.row_loading, parent, false))
+            else -> MessageViewHolder(inflater.inflate(R.layout.row_message, parent, false))
+        }
     }
 
     override fun onBindViewHolder(holder: PhotoListViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        (recyclerView.layoutManager as GridLayoutManager).spanSizeLookup = spanSizeLookup
     }
 
     abstract class PhotoListViewHolder(
@@ -47,7 +72,7 @@ class PhotoAdapter @Inject constructor(
         abstract fun bind(item: PhotoListItem)
     }
 
-    inner class PhotoViewHolder(containerView: View): PhotoListViewHolder(containerView){
+    class PhotoViewHolder(containerView: View): PhotoListViewHolder(containerView){
         override fun bind(item: PhotoListItem) {
             item.photo?.let {
                 Glide.with(itemView)
@@ -58,10 +83,14 @@ class PhotoAdapter @Inject constructor(
         }
     }
 
-    inner class MessageViewHolder(containerView: View): PhotoListViewHolder(containerView){
+    class MessageViewHolder(containerView: View): PhotoListViewHolder(containerView){
         override fun bind(item: PhotoListItem) {
-            tv_message.text = item.message?: itemView.context.getString(R.string.error)
+            tv_message.text = itemView.context.getString(item.message?:R.string.error)
         }
+    }
+
+    class LoadingItemViewHolder(containerView: View): PhotoListViewHolder(containerView){
+        override fun bind(item: PhotoListItem) {}
     }
 }
 

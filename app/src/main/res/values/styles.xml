@@ -18,6 +18,10 @@
         <item name="android:progressTint">@color/colorRatingBarActivated</item>
     </style>
 
+    <style name="AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+        <item name="android:background">@color/colorAppbar</item>
+    </style>
+
     <style name="ActionBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="android:background">@color/colorToolbar</item>
     </style>

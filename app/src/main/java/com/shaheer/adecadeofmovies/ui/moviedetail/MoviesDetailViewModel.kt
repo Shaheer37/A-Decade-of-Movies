@@ -2,7 +2,7 @@ package com.shaheer.adecadeofmovies.ui.moviedetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.domain.models.MovieDetails
 import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
 import com.shaheer.adecadeofmovies.domain.repositories.PhotoRepository
@@ -28,7 +28,7 @@ class MoviesDetailViewModel @Inject constructor(
                 {
                     _movieDetails.value = Result.Success(it)
                     getPhotos()
-                }, {_movieDetails.value = Result.Error(Exception(it))}
+                }, {_movieDetails.value = Result.Error(it)}
             )
         _movieDetails.value = Result.Loading()
         compositeDisposable.add(disposable)
@@ -39,10 +39,13 @@ class MoviesDetailViewModel @Inject constructor(
         val disposable = photoRepository.getPhotos(searchQuery)
             .map { it.map { photo -> PhotoListItem(PhotoListItemType.Photo, null, photo) } }
             .subscribe { photos, throwable ->
-                photos?.let { _photos.value = Result.Success(it) }
-                throwable?.let { _photos.value = Result.Error(Exception(it)) }
+                photos?.let {
+                    _photos.value = if(it.isNotEmpty()) Result.Success(it)
+                    else Result.Success(listOf(PhotoListItem(PhotoListItemType.Message, message = R.string.no_photos_found)))
+                }
+                throwable?.let { _photos.value = Result.Error(it, listOf(PhotoListItem(PhotoListItemType.Message))) }
             }
-        _photos.value = Result.Loading()
+        _photos.value = Result.Loading(listOf(PhotoListItem(PhotoListItemType.Loading)))
         compositeDisposable.add(disposable)
     }
 
