@@ -47,14 +47,15 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_movies, container, false)
-        return root
+        return inflater.inflate(R.layout.fragment_movies, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setUpSearch()
+
+        movies_swipe_refresh.setOnRefreshListener { viewModel.getMovies() }
 
         rv_movies.layoutManager = LinearLayoutManager(requireContext())
         rv_movies.adapter = adapter
@@ -66,9 +67,15 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
     }
 
     private fun handleMoviesResult(result: Result<List<MovieListItem>>) = when(result){
-        is Result.Success -> { showMovies(result.data) }
-        is Result.Error -> { result.exception.printStackTrace()}
-        is Result.Loading -> {}
+        is Result.Success -> {
+            movies_swipe_refresh.isRefreshing = false
+            showMovies(result.data)
+        }
+        is Result.Error -> {
+            movies_swipe_refresh.isRefreshing = false
+            result.exception.printStackTrace()
+        }
+        is Result.Loading -> {movies_swipe_refresh.isRefreshing = true}
     }
 
     private fun showMovies(movieItems: List<MovieListItem>){

@@ -7,11 +7,13 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-abstract class MovieSearchFragmentModule {
-
-    @Provides
-    @MovieSearchFragmentQualifier
-    fun bindsMoviesAdapter(movieClickListener: MovieSearchFragment): MoviesAdapter {
-        return MoviesAdapter(movieClickListener)
+interface MovieSearchFragmentModule {
+    companion object{
+        @Provides
+        @JvmStatic
+        @MovieSearchFragmentQualifier
+        fun bindsMoviesAdapter(movieClickListener: MovieSearchFragment): MoviesAdapter {
+            return MoviesAdapter(movieClickListener)
+        }
     }
 }
