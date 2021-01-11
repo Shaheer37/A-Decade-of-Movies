@@ -30,7 +30,7 @@ class MoviesDetailViewModel @Inject constructor(
                     getPhotos()
                 }, {_movieDetails.value = Result.Error(Exception(it))}
             )
-        _movieDetails.value = Result.Loading
+        _movieDetails.value = Result.Loading()
         compositeDisposable.add(disposable)
     }
 
@@ -42,7 +42,7 @@ class MoviesDetailViewModel @Inject constructor(
                 photos?.let { _photos.value = Result.Success(it) }
                 throwable?.let { _photos.value = Result.Error(Exception(it)) }
             }
-        _photos.value = Result.Loading
+        _photos.value = Result.Loading()
         compositeDisposable.add(disposable)
     }
 

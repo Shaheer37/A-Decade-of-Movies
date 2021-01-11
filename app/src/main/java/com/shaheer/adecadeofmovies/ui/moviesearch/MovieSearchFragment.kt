@@ -78,7 +78,7 @@ class MovieSearchFragment : BaseFragment(), MovieClickListener {
 
     private fun handleMoviesResult(result: Result<List<MovieListItem>>) = when(result){
         is Result.Success -> { showMovies(result.data) }
-        is Result.Error -> { result.exception.printStackTrace()}
+        is Result.Error -> { result.throwable.printStackTrace()}
         is Result.Loading -> {}
     }
 

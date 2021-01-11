@@ -62,7 +62,7 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
         rv_movies.addItemDecoration(MoviesItemSpacingDecoration())
 
         viewModel.movies.observe(viewLifecycleOwner, Observer { handleMoviesResult(it) })
-        viewModel.movie.observe(viewLifecycleOwner, Observer { onMovieClicked(it) })
+        viewModel.movie.observe(viewLifecycleOwner, Observer { it?.let { onMovieClicked(it) } })
         viewModel.getMovies()
     }
 
@@ -73,7 +73,8 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
         }
         is Result.Error -> {
             movies_swipe_refresh.isRefreshing = false
-            result.exception.printStackTrace()
+            result.data?.let { showMovies(it) }
+            result.throwable.printStackTrace()
         }
         is Result.Loading -> {movies_swipe_refresh.isRefreshing = true}
     }

@@ -3,14 +3,14 @@ package com.shaheer.adecadeofmovies.ui.models
 sealed class Result<out R> {
 
     data class Success<out T>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-    object Loading : Result<Nothing>()
+    data class Error<out T>(val throwable: Throwable, val data: T? = null) : Result<T>()
+    data class Loading<out T>(val data: T? = null) : Result<T>()
 
     override fun toString(): String {
         return when (this) {
             is Success<*> -> "Success[data=$data]"
-            is Error -> "Error[exception=$exception]"
-            Loading -> "Loading"
+            is Error -> "Error[throwable=$throwable, data=$data]"
+            is Loading -> "Loading[data=$data]"
         }
     }
 }

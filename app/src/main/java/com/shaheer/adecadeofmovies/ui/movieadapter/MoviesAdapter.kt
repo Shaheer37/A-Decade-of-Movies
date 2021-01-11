@@ -10,6 +10,8 @@ import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.MovieListItemType
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.row_message.*
+import kotlinx.android.synthetic.main.row_message.view.*
 import kotlinx.android.synthetic.main.row_movie.*
 import kotlinx.android.synthetic.main.row_year.*
 import javax.inject.Inject
@@ -20,16 +22,23 @@ class MoviesAdapter @Inject constructor(
     companion object{
         const val TYPE_YEAR = 1
         const val TYPE_MOVIE = 2
+        const val TYPE_MESSAGE = 3
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(getItem(position).type == MovieListItemType.Year) TYPE_YEAR
-        else TYPE_MOVIE
+        return when(getItem(position).type){
+            MovieListItemType.Year -> TYPE_YEAR
+            MovieListItemType.Movie -> TYPE_MOVIE
+            else -> TYPE_MESSAGE
+        }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return if(viewType == TYPE_YEAR) YearItemViewHolder(inflater.inflate(R.layout.row_year, parent, false))
-            else MovieItemViewHolder(inflater.inflate(R.layout.row_movie, parent, false), movieClickListener)
+        return when(viewType){
+            TYPE_YEAR -> YearItemViewHolder(inflater.inflate(R.layout.row_year, parent, false))
+            TYPE_MOVIE -> MovieItemViewHolder(inflater.inflate(R.layout.row_movie, parent, false), movieClickListener)
+            else -> MessageItemViewHolder(inflater.inflate(R.layout.row_message, parent, false))
+        }
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -60,12 +69,19 @@ class MoviesAdapter @Inject constructor(
             tv_year.text = item.year?.toString()
         }
     }
+
+    class MessageItemViewHolder(override val containerView: View): ItemViewHolder(containerView){
+        override fun bind(item: MovieListItem) {
+            tv_message.text = itemView.context.getString(item.message?:R.string.error)
+        }
+    }
 }
 class MoviesDiffCallback : DiffUtil.ItemCallback<MovieListItem>() {
     override fun areItemsTheSame(oldItem: MovieListItem, newItem: MovieListItem): Boolean {
         return oldItem.type == newItem.type
                 && oldItem.year == newItem.year
                 && oldItem.movie?.id == newItem.movie?.id
+                && oldItem.message == newItem.message
     }
 
     override fun areContentsTheSame(oldItem: MovieListItem, newItem: MovieListItem): Boolean {

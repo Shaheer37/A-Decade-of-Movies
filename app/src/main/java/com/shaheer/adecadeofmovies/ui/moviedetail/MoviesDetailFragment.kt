@@ -81,7 +81,7 @@ class MoviesDetailFragment : Fragment() {
             Timber.d(result.data.toString())
             setMovieLayout(result.data)
         }
-        is Result.Error -> { result.exception.printStackTrace()}
+        is Result.Error -> { result.throwable.printStackTrace()}
         is Result.Loading -> {}
     }
 
@@ -90,7 +90,7 @@ class MoviesDetailFragment : Fragment() {
             Timber.d(result.data.toString())
             adapter.submitList(result.data)
         }
-        is Result.Error -> { result.exception.printStackTrace()}
+        is Result.Error -> { result.throwable.printStackTrace()}
         is Result.Loading -> {}
     }
 

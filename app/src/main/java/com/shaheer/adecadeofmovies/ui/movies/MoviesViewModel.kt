@@ -2,18 +2,15 @@ package com.shaheer.adecadeofmovies.ui.movies
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.shaheer.adecadeofmovies.R
 import com.shaheer.adecadeofmovies.domain.models.Movie
 import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
 import com.shaheer.adecadeofmovies.ui.base.BaseViewModel
 import com.shaheer.adecadeofmovies.ui.mapper.MovieListMapper
-import com.shaheer.adecadeofmovies.ui.mapper.MovieSearchListMapper
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.MovieListItemType
 import com.shaheer.adecadeofmovies.ui.models.Result
 import com.shaheer.adecadeofmovies.ui.models.data
-import io.reactivex.Single
-import timber.log.Timber
-import java.lang.Exception
 import javax.inject.Inject
 
 class MoviesViewModel @Inject constructor(
@@ -31,10 +28,13 @@ class MoviesViewModel @Inject constructor(
         val disposable = moviesRepository.getMovies()
             .map { movieListMapper.mapToLocal(it) }
             .subscribe { movies, throwable ->
-                movies?.let { _movies.value = Result.Success(movies) }
-                throwable?.let { _movies.value = Result.Error(Exception(it)) }
+                movies?.let {
+                    _movies.value = if(movies.isNotEmpty()) Result.Success(movies)
+                        else Result.Success(listOf(MovieListItem(MovieListItemType.Message, R.string.no_movies)))
+                }
+                throwable?.let { _movies.value = Result.Error(it, listOf(MovieListItem(MovieListItemType.Message))) }
             }
-        _movies.value = Result.Loading
+        _movies.value = Result.Loading()
         compositeDisposable.add(disposable)
     }
 
