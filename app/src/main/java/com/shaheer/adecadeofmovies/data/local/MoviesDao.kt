@@ -19,40 +19,11 @@ interface MoviesDao {
     @Query("Select * from MovieEntity where id = :id")
     fun getMovieDetails(id: Int): Maybe<MovieWithActorsAndGenres>
 
-    @Query("Select * from MovieEntity order by year desc")
-    fun getMovies(): Single<List<MovieEntity>>
-
     @Query("Select * from MovieEntity order by year desc, rating desc")
     fun getSortedMovies(): Single<List<MovieEntity>>
 
     @Query("Select * from MovieEntity where trimmedTitle like '%'||:query||'%' order by year desc, rating desc")
     fun getMoviesForQuery(query: String): Single<List<MovieEntity>>
-
-/*    @Transaction
-    fun getMoviesInYearsForQuery(query: String): List<MovieEntitiesInAYear>{
-        var query = query.replace(" ", "").toLowerCase(Locale.ROOT)
-        val movies = getMoviesForQuery(query)
-        val yearList = mutableListOf<MovieEntitiesInAYear>()
-        var year = 0
-        var index = 0
-        movies.forEach { movie ->
-            when {
-                year == 0 ->{
-                    year = movie.year
-                    yearList.add(MovieEntitiesInAYear(movie.year, mutableListOf(movie)))
-                }
-                year != movie.year -> {
-                    year = movie.year
-                    index++
-                    yearList.add(MovieEntitiesInAYear(movie.year, mutableListOf(movie)))
-                }
-                else -> {
-                    yearList[index].movies += movie
-                }
-            }
-        }
-        return yearList
-    }*/
 
     @Insert fun insertMovie(movie: MovieEntity): Long
 

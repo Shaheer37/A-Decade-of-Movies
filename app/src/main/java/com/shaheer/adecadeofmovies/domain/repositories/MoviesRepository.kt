@@ -2,7 +2,6 @@ package com.shaheer.adecadeofmovies.domain.repositories
 
 import com.shaheer.adecadeofmovies.domain.models.Movie
 import com.shaheer.adecadeofmovies.domain.models.MovieDetails
-import com.shaheer.adecadeofmovies.domain.models.MoviesInAYear
 import io.reactivex.Maybe
 import io.reactivex.Single
 

@@ -1,6 +1,5 @@
 package com.shaheer.adecadeofmovies.ui.mapper
 
-import com.shaheer.adecadeofmovies.data.local.models.MovieEntitiesInAYear
 import com.shaheer.adecadeofmovies.domain.Mapper
 import com.shaheer.adecadeofmovies.domain.models.Movie
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem

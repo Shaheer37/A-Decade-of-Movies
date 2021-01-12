@@ -29,7 +29,6 @@
             android:layout_marginEnd="@dimen/search_et_padding_end"
             android:background="@android:color/transparent"
             />
-
     </androidx.appcompat.widget.Toolbar>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movies"

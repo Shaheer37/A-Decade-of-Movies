@@ -5,7 +5,6 @@ import com.shaheer.adecadeofmovies.data.remote.getmovies.GetMoviesData
 import com.shaheer.adecadeofmovies.data.local.MoviesDatabase
 import com.shaheer.adecadeofmovies.data.mapper.MovieDetailsMapper
 import com.shaheer.adecadeofmovies.data.mapper.MovieMapper
-import com.shaheer.adecadeofmovies.data.mapper.MoviesInAYearMapper
 import com.shaheer.adecadeofmovies.domain.models.Movie
 import com.shaheer.adecadeofmovies.domain.models.MovieDetails
 import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
@@ -21,7 +20,6 @@ class MoviesRepositoryImpl @Inject constructor(
     private val database: MoviesDatabase,
     private val getMoviesData: GetMoviesData,
     private val movieMapper: MovieMapper,
-    private val moviesInAYearMapper: MoviesInAYearMapper,
     private val movieDetailsMapper: MovieDetailsMapper
 ): MoviesRepository {
 
