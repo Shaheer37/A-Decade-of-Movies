@@ -28,7 +28,7 @@ class MoviesRepositoryImpl @Inject constructor(
             .flatMap { movieEntities ->
                 if(movieEntities.isEmpty()){
                     getMoviesData().flatMap {
-                        Completable.fromCallable { database.moviesDao().insertMovies(it.movies) }
+                        Completable.fromCallable { database.moviesDao().insertMovies(it) }
                             .andThen(database.moviesDao().getSortedMovies())
                             .map { it.map { movieEntity -> movieMapper.mapToRemote(movieEntity) } }
                     }

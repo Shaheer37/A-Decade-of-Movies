@@ -42,6 +42,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Always show the result of every unit test when running via command line, even if it passes.
+    testOptions{
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -129,7 +137,7 @@ dependencies {
     testImplementation "androidx.room:room-testing:$roomVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineTestVersion"
 
-//    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
 //    testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
