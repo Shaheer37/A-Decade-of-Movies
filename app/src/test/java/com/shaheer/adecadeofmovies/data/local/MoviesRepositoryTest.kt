@@ -5,26 +5,44 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.shaheer.adecadeofmovies.data.remote.getmovies.models.Movie
-import org.junit.*
+import com.shaheer.adecadeofmovies.TestThreads
+import com.shaheer.adecadeofmovies.data.MoviesRepositoryImpl
+import com.shaheer.adecadeofmovies.data.mapper.MovieDetailsMapper
+import com.shaheer.adecadeofmovies.data.mapper.MovieMapper
+import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [Build.VERSION_CODES.P])
-class DatabaseTest {
+class MoviesRepositoryTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    private lateinit var moviesRepository: MoviesRepository
+    private val getMoviesData = FakeGetMoviesDataImpl()
     private lateinit var database: MoviesDatabase
+    private val moviesMapper = MovieMapper()
+    private val movieDetailsMapper = MovieDetailsMapper()
 
     @Before
-    fun initDb() {
+    fun before() {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             MoviesDatabase::class.java
         ).allowMainThreadQueries().build()
 
+        moviesRepository = MoviesRepositoryImpl(
+            database
+            , getMoviesData
+            , moviesMapper
+            , movieDetailsMapper
+            , TestThreads()
+        )
     }
 
     @Test
@@ -39,27 +57,27 @@ class DatabaseTest {
         database.moviesDao().getSortedMovies().test().assertValue {
             movieId = it.first().id
             it.size == 1
-            && it.first().title == testMovie.title
-            && it.first().rating == testMovie.rating
-            && it.first().year == testMovie.year
+                    && it.first().title == testMovie.title
+                    && it.first().rating == testMovie.rating
+                    && it.first().year == testMovie.year
         }
 
-        database.moviesDao().getMovieDetails(movieId).test().assertValue {
-            it.movieEntity.title == testMovie.title
-                    && it.movieEntity.year == testMovie.year
-                    && it.movieEntity.rating == testMovie.rating
-                    && it.actors.map { it.name } == testCast
-                    && it.genre.map { it.name } == testGenre
+        moviesRepository.getMovieDetails(movieId).test().assertValue {
+            it.title == testMovie.title
+                    && it.year == testMovie.year
+                    && it.rating == testMovie.rating
+                    && it.cast == testCast
+                    && it.genres == testGenre
         }
     }
 
     @Test
-    fun testGetSortedMovies(){
+    fun testGetMovies(){
         val testMovies2018 = (1..5).map{ MovieFactory.createMovieRemote(year = 2018) }
         val testMovies2017 = (1..3).map { MovieFactory.createMovieRemote(year = 2017) }
         val testMovies2015 = (1..7).map { MovieFactory.createMovieRemote(year = 2015) }
 
-        val testMovies = listOf(testMovies2017, testMovies2015, testMovies2018).flatten()
+        getMoviesData.movies = listOf(testMovies2017, testMovies2015, testMovies2018).flatten()
 
         val sortedMovies2018 = testMovies2018.sortedByDescending { it.rating }
         val sortedMovies2017 = testMovies2017.sortedByDescending { it.rating }
@@ -67,9 +85,7 @@ class DatabaseTest {
 
         val sortedMovies = listOf(sortedMovies2018, sortedMovies2017, sortedMovies2015).flatten()
 
-        database.moviesDao().insertMovies(testMovies)
-
-        database.moviesDao().getSortedMovies().test().assertValue {
+        moviesRepository.getMovies().test().assertValue {
             it.map { it.title } == sortedMovies.map { it.title }
         }
     }
@@ -93,12 +109,11 @@ class DatabaseTest {
 
         database.moviesDao().insertMovies(testMovies)
 
-        database.moviesDao().getMoviesForQuery(searchString).test().assertValue {
+        moviesRepository.getMoviesAgainstQuery(searchString).test().assertValue {
             it.map { it.title } == sortedMovies.map { it.title }
         }
     }
 
     @After
     fun closeDb() = database.close()
-
 }

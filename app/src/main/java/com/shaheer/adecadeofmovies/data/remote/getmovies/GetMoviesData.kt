@@ -9,11 +9,15 @@ import io.reactivex.Single
 import java.io.IOException
 import javax.inject.Inject
 
-class GetMoviesData @Inject constructor(
+interface GetMoviesData {
+    operator fun invoke(): Single<List<Movie>>
+}
+
+class GetMoviesDataImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val gson: Gson
-) {
-    operator fun invoke(): Single<List<Movie>>{
+) : GetMoviesData {
+    override operator fun invoke(): Single<List<Movie>>{
         return Single.create{ emitter ->
             try {
                 val inStream = context.assets.open("movies.json")

@@ -1,8 +1,10 @@
 package com.shaheer.adecadeofmovies.ui.injection.module
 
 import android.content.Context
+import com.shaheer.adecadeofmovies.domain.executor.ExecutionThreads
 import com.shaheer.adecadeofmovies.ui.App
 import com.shaheer.adecadeofmovies.ui.MainActivity
+import com.shaheer.adecadeofmovies.ui.UiThreads
 import com.shaheer.adecadeofmovies.ui.injection.qualifiers.ApplicationContext
 import com.shaheer.adecadeofmovies.ui.injection.subcomponent.MovieSearchFragmentSubComponent
 import com.shaheer.adecadeofmovies.ui.injection.subcomponent.MoviesFragmentSubComponent
@@ -43,6 +45,6 @@ interface UiModule {
     @ContributesAndroidInjector
     fun contributesMainActivity(): MainActivity
 
-//    @Binds
-//    fun bindsPostExecutionThread(postExecutionThread: UiThread): PostExecutionThread
+    @Binds
+    fun bindsPostExecutionThread(postExecutionThread: UiThreads): ExecutionThreads
 }

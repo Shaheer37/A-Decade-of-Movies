@@ -11,6 +11,8 @@ import dagger.Module
 import dagger.Provides
 import com.shaheer.adecadeofmovies.data.remote.DataFactory
 import com.shaheer.adecadeofmovies.data.remote.MoviesService
+import com.shaheer.adecadeofmovies.data.remote.getmovies.GetMoviesData
+import com.shaheer.adecadeofmovies.data.remote.getmovies.GetMoviesDataImpl
 import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
 import com.shaheer.adecadeofmovies.domain.repositories.PhotoRepository
 import dagger.Binds
@@ -41,6 +43,10 @@ interface DataModule {
         fun providesGson(): Gson { return Gson() }
 
     }
+
+    @Binds
+    @Singleton
+    fun bindsGetMoviesData(getMoviesData: GetMoviesDataImpl): GetMoviesData
 
     @Binds
     @Singleton
