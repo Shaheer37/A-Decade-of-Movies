@@ -25,6 +25,7 @@ class MoviesViewModel @Inject constructor(
     val movie: LiveData<Movie> = _movie
 
     fun getMovies(){
+        _movies.value = Result.Loading()
         val disposable = moviesRepository.getMovies()
             .map { movieListMapper.mapToLocal(it) }
             .subscribe { movies, throwable ->
@@ -34,7 +35,6 @@ class MoviesViewModel @Inject constructor(
                 }
                 throwable?.let { _movies.value = Result.Error(it, listOf(MovieListItem(MovieListItemType.Message))) }
             }
-        _movies.value = Result.Loading()
         compositeDisposable.add(disposable)
     }
 

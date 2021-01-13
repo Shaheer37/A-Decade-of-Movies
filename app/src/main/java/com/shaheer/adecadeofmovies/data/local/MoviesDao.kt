@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.shaheer.adecadeofmovies.data.remote.getmovies.models.Movie
+import com.shaheer.adecadeofmovies.data.remote.getmovies.models.RemoteMovie
 import com.shaheer.adecadeofmovies.data.local.entities.Actor
 import com.shaheer.adecadeofmovies.data.local.entities.Genre
 import com.shaheer.adecadeofmovies.data.local.entities.MovieEntity
@@ -32,8 +32,8 @@ interface MoviesDao {
     @Insert fun insertGenre(genre: Genre)
 
     @Transaction
-    fun insertMovies(movies: List<Movie>){
-        movies.forEach {
+    fun insertMovies(remoteMovies: List<RemoteMovie>){
+        remoteMovies.forEach {
             val movieId = insertMovie(MovieEntity(0, it.title
                 , it.title.replace(" ", "").toLowerCase(Locale.ROOT)
                 , it.year, it.rating))

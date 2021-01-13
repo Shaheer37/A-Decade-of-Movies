@@ -10,7 +10,7 @@ import com.shaheer.adecadeofmovies.data.MoviesRepositoryImpl
 import com.shaheer.adecadeofmovies.data.mapper.MovieDetailsMapper
 import com.shaheer.adecadeofmovies.data.mapper.MovieMapper
 import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
-import org.junit.After
+import com.shaheer.adecadeofmovies.factory.MovieFactory
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,16 +37,12 @@ class MoviesRepositoryTest {
         ).allowMainThreadQueries().build()
 
         moviesRepository = MoviesRepositoryImpl(
-            database
-            , getMoviesData
-            , moviesMapper
-            , movieDetailsMapper
-            , TestThreads()
+            database, getMoviesData, moviesMapper, movieDetailsMapper, TestThreads()
         )
     }
 
     @Test
-    fun testMovieDetailRetrieval(){
+    fun testMovieDetailRetrieval() {
         val testCast = MovieFactory.createListOfString(3)
         val testGenre = MovieFactory.createListOfString(2)
         val testMovie = MovieFactory.createMovieRemote(cast = testCast, genre = testGenre)
@@ -72,12 +68,12 @@ class MoviesRepositoryTest {
     }
 
     @Test
-    fun testGetMovies(){
-        val testMovies2018 = (1..5).map{ MovieFactory.createMovieRemote(year = 2018) }
+    fun testGetMovies() {
+        val testMovies2018 = (1..5).map { MovieFactory.createMovieRemote(year = 2018) }
         val testMovies2017 = (1..3).map { MovieFactory.createMovieRemote(year = 2017) }
         val testMovies2015 = (1..7).map { MovieFactory.createMovieRemote(year = 2015) }
 
-        getMoviesData.movies = listOf(testMovies2017, testMovies2015, testMovies2018).flatten()
+        getMoviesData.remoteMovies = listOf(testMovies2017, testMovies2015, testMovies2018).flatten()
 
         val sortedMovies2018 = testMovies2018.sortedByDescending { it.rating }
         val sortedMovies2017 = testMovies2017.sortedByDescending { it.rating }
@@ -91,21 +87,31 @@ class MoviesRepositoryTest {
     }
 
     @Test
-    fun testGetSortedSearchMovies(){
+    fun testGetSortedSearchMovies() {
         val searchString = "art"
-        val testMovies2018 = (1..5).map{ MovieFactory.createMovieRemote(year = 2018, searchString = searchString) }
-        val testMovies2017 = (1..3).map { MovieFactory.createMovieRemote(year = 2017, searchString = searchString) }
-        val testMovies2015 = (1..7).map { MovieFactory.createMovieRemote(year = 2015, searchString = searchString) }
-        val testMovies2013 = (1..9).map { MovieFactory.createMovieRemote(year = 2013, searchString = searchString) }
+        val testMovies2018 =
+            (1..5).map { MovieFactory.createMovieRemote(year = 2018, searchString = searchString) }
+        val testMovies2017 =
+            (1..3).map { MovieFactory.createMovieRemote(year = 2017, searchString = searchString) }
+        val testMovies2015 =
+            (1..7).map { MovieFactory.createMovieRemote(year = 2015, searchString = searchString) }
+        val testMovies2013 =
+            (1..9).map { MovieFactory.createMovieRemote(year = 2013, searchString = searchString) }
 
-        val testMovies = listOf(testMovies2017, testMovies2015, testMovies2018, testMovies2013).flatten()
+        val testMovies =
+            listOf(testMovies2017, testMovies2015, testMovies2018, testMovies2013).flatten()
 
-        val sortedMovies2018 = testMovies2018.filter { it.title.contains(searchString) }.sortedByDescending { it.rating }
-        val sortedMovies2017 = testMovies2017.filter { it.title.contains(searchString) }.sortedByDescending { it.rating }
-        val sortedMovies2015 = testMovies2015.filter { it.title.contains(searchString) }.sortedByDescending { it.rating }
-        val sortedMovies2013 = testMovies2013.filter { it.title.contains(searchString) }.sortedByDescending { it.rating }
+        val sortedMovies2018 = testMovies2018.filter { it.title.contains(searchString) }
+            .sortedByDescending { it.rating }
+        val sortedMovies2017 = testMovies2017.filter { it.title.contains(searchString) }
+            .sortedByDescending { it.rating }
+        val sortedMovies2015 = testMovies2015.filter { it.title.contains(searchString) }
+            .sortedByDescending { it.rating }
+        val sortedMovies2013 = testMovies2013.filter { it.title.contains(searchString) }
+            .sortedByDescending { it.rating }
 
-        val sortedMovies = listOf(sortedMovies2018, sortedMovies2017, sortedMovies2015, sortedMovies2013).flatten()
+        val sortedMovies =
+            listOf(sortedMovies2018, sortedMovies2017, sortedMovies2015, sortedMovies2013).flatten()
 
         database.moviesDao().insertMovies(testMovies)
 
@@ -113,7 +119,4 @@ class MoviesRepositoryTest {
             it.map { it.title } == sortedMovies.map { it.title }
         }
     }
-
-    @After
-    fun closeDb() = database.close()
 }

@@ -28,6 +28,7 @@ class MovieSearchViewModel @Inject constructor(
     val movies: LiveData<Result<List<MovieListItem>>> = _movies
 
     fun searchMovies(query: String = ""){
+        _movies.value = Result.Loading(listOf(MovieListItem(MovieListItemType.Loading)))
         val disposable = moviesRepository.getMoviesAgainstQuery(query)
             .map { movieSearchListMapper.mapToLocal(it) }
             .subscribe { movies, throwable ->
@@ -39,7 +40,6 @@ class MovieSearchViewModel @Inject constructor(
                     it, listOf(MovieListItem(MovieListItemType.Message)))
                 }
             }
-        _movies.value = Result.Loading(listOf(MovieListItem(MovieListItemType.Loading)))
         compositeDisposable.add(disposable)
     }
 

@@ -5,6 +5,4 @@ import com.shaheer.adecadeofmovies.domain.repositories.MoviesRepository
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-): ViewModel() {
-
-}
+): ViewModel() {}

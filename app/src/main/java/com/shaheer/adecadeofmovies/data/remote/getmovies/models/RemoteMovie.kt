@@ -1,6 +1,6 @@
 package com.shaheer.adecadeofmovies.data.remote.getmovies.models
 
-data class Movie(
+data class RemoteMovie(
     val title: String,
     val year: Int,
     val cast: List<String>,

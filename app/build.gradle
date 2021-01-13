@@ -73,6 +73,7 @@ dependencies {
     def archTestingVersion = "2.1.0"
     def robolectricVersion = "4.3.1"
     def mockitoVersion = "3.3.3"
+    def mockitoKotlinVersion = "2.2.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -139,7 +140,7 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineTestVersion"
 
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

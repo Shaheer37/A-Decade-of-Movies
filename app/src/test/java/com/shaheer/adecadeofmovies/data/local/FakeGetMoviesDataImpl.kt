@@ -1,13 +1,13 @@
 package com.shaheer.adecadeofmovies.data.local
 
 import com.shaheer.adecadeofmovies.data.remote.getmovies.GetMoviesData
-import com.shaheer.adecadeofmovies.data.remote.getmovies.models.Movie
+import com.shaheer.adecadeofmovies.data.remote.getmovies.models.RemoteMovie
 import io.reactivex.Single
 
 class FakeGetMoviesDataImpl: GetMoviesData {
-    var movies: List<Movie> = emptyList()
+    var remoteMovies: List<RemoteMovie> = emptyList()
 
-    override fun invoke(): Single<List<Movie>> {
-        return Single.just(movies)
+    override fun invoke(): Single<List<RemoteMovie>> {
+        return Single.just(remoteMovies)
     }
 }

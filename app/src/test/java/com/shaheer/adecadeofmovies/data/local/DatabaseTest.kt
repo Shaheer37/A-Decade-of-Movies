@@ -5,7 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.shaheer.adecadeofmovies.data.remote.getmovies.models.Movie
+import com.shaheer.adecadeofmovies.factory.MovieFactory
 import org.junit.*
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config

@@ -10,6 +10,10 @@ object DataFactory {
 
     fun getLocale() = Locale.US;
 
+    fun randomInt():Int{
+        return ThreadLocalRandom.current().nextInt(1, 1000)
+    }
+
     fun randomString():String{
         return UUID.randomUUID().toString()
     }
