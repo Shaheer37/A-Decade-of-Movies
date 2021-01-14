@@ -2,7 +2,8 @@
 <resources>
     <dimen name="toolbar_elevation">10dp</dimen>
     <dimen name="movie_card_corner_radius">8dp</dimen>
-    <dimen name="movie_card_padding">10dp</dimen>
+    <dimen name="movie_card_padding">12dp</dimen>
+    <dimen name="movie_card_elevation">10dp</dimen>
     <dimen name="movie_item_padding_vertical">5dp</dimen>
     <dimen name="movie_item_padding_horizontal">10dp</dimen>
     <dimen name="movie_detail_md_view_elevation">2dp</dimen>

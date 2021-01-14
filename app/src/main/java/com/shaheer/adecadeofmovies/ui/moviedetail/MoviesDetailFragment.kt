@@ -1,12 +1,18 @@
 package com.shaheer.adecadeofmovies.ui.moviedetail
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -24,14 +30,6 @@ import javax.inject.Inject
 
 class MoviesDetailFragment : Fragment(), PhotoListClickListener {
 
-    @Inject lateinit var viewModel: MoviesDetailViewModel
-    @Inject lateinit var viewModelFactory: ViewModelFactory
-
-    @Inject lateinit var adapter: PhotoAdapter
-
-    private val args: MoviesDetailFragmentArgs by navArgs()
-
-    private val isMasterDetail: Boolean by lazy { resources.getBoolean(R.bool.is_md) }
 
     companion object {
         @JvmStatic
@@ -41,7 +39,18 @@ class MoviesDetailFragment : Fragment(), PhotoListClickListener {
                     putInt("movieId", movieId)
                 }
             }
+        const val FADE_IN_DURATION = 500L
     }
+
+    @Inject lateinit var viewModel: MoviesDetailViewModel
+
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+
+    @Inject lateinit var adapter: PhotoAdapter
+
+    private val args: MoviesDetailFragmentArgs by navArgs()
+
+    private val isMasterDetail: Boolean by lazy { resources.getBoolean(R.bool.is_md) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -128,6 +137,12 @@ class MoviesDetailFragment : Fragment(), PhotoListClickListener {
         }else {
             tv_cast.visibility = View.GONE
             chip_group_cast.visibility = View.GONE
+        }
+
+        ObjectAnimator.ofFloat(cl_details, "alpha", 0f, 1f).apply {
+            interpolator = DecelerateInterpolator()
+            duration = FADE_IN_DURATION
+            start()
         }
     }
 }
