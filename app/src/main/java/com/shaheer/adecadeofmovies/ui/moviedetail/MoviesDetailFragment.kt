@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -70,7 +72,10 @@ class MoviesDetailFragment : Fragment() {
     }
 
     private fun configureLayout()
-        = if(isMasterDetail) toolbar.visibility = View.GONE
+        = if(isMasterDetail) {
+            toolbar.visibility = View.GONE
+            (cl_details.layoutParams as FrameLayout.LayoutParams).topMargin = 0
+        }
         else {
             toolbar.visibility = View.VISIBLE
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }

@@ -13,15 +13,16 @@ import com.shaheer.adecadeofmovies.ui.injection.ViewModelFactory
 import com.shaheer.adecadeofmovies.ui.injection.qualifiers.MoviesFragmentQualifier
 import com.shaheer.adecadeofmovies.ui.models.MovieListItem
 import com.shaheer.adecadeofmovies.ui.models.Result
-import com.shaheer.adecadeofmovies.ui.moviedetail.MoviesDetailFragment
 import com.shaheer.adecadeofmovies.ui.movieadapter.MovieClickListener
 import com.shaheer.adecadeofmovies.ui.movieadapter.MoviesAdapter
 import com.shaheer.adecadeofmovies.ui.movieadapter.MoviesItemSpacingDecoration
+import com.shaheer.adecadeofmovies.ui.moviedetail.MoviesDetailFragment
 import com.shaheer.adecadeofmovies.utils.hasFragments
 import com.shaheer.adecadeofmovies.utils.hideKeyboard
 import com.shaheer.adecadeofmovies.utils.replaceFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_movies.*
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -52,6 +53,7 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d(this.javaClass.name)
 
         setUpSearch()
 
@@ -76,7 +78,9 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
             result.data?.let { showMovies(it) }
             result.throwable.printStackTrace()
         }
-        is Result.Loading -> {movies_swipe_refresh.isRefreshing = true}
+        is Result.Loading -> {
+            movies_swipe_refresh.isRefreshing = true
+        }
     }
 
     private fun showMovies(movieItems: List<MovieListItem>){
@@ -93,7 +97,10 @@ class MoviesFragment : BaseFragment(), MovieClickListener {
 
     override fun onMovieClicked(movie: Movie) {
         requireActivity().currentFocus?.hideKeyboard()
-        if(isMasterDetail) replaceFragment(MoviesDetailFragment.newInstance(movie.id), R.id.fragment_container)
+        if(isMasterDetail) replaceFragment(
+            MoviesDetailFragment.newInstance(movie.id),
+            R.id.fragment_container
+        )
         else findNavController().navigate(MoviesFragmentDirections.actionMoviesToMoviesDetail(movie.id))
     }
 
