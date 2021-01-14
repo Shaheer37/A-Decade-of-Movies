@@ -40,6 +40,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', props.FLICKR_API_KEY_NAME, props.FLICKR_API_KEY
+            buildConfigField 'String', props.FLICKR_API_BASE_URL_NAME, props.FLICKR_API_BASE_URL
         }
     }
 
