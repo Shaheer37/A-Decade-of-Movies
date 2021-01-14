@@ -4,4 +4,5 @@ ext {
 
     FLICKR_API_BASE_URL_NAME = "FlickrApiBaseUrl"
     FLICKR_API_BASE_URL = "\""+System.getenv(FLICKR_API_BASE_URL_NAME)+"\""
+    //FLICKR_API_BASE_URL = "\""+https://api.flickr.com/services/+"\""
 }

@@ -6,7 +6,12 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 
 interface MoviesRepository {
+    //returns a list of all the movies sorted on year and rating.
     fun getMovies(): Single<List<Movie>>
-    fun getMovieDetails(movieId: Int): Maybe<MovieDetails>
+
+    //returns a list of all the movies that contain the search string sorted on year and rating.
     fun getMoviesAgainstQuery(query: String): Single<List<Movie>>
+
+    //returns complete details of the movie with the queried id.
+    fun getMovieDetails(movieId: Int): Maybe<MovieDetails>
 }

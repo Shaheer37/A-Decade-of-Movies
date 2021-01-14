@@ -7,6 +7,8 @@ import com.shaheer.adecadeofmovies.ui.models.MovieListItemType
 import javax.inject.Inject
 
 class MovieSearchListMapper @Inject constructor(): Mapper<List<MovieListItem>, List<Movie>> {
+    //Takes the list of movies inserts year model item before the year's movies
+    //and limits the list to only contain 5 movies per year
     override fun mapToLocal(remote: List<Movie>): List<MovieListItem> {
         val movieItemList = mutableListOf<MovieListItem>()
         var year = 0
