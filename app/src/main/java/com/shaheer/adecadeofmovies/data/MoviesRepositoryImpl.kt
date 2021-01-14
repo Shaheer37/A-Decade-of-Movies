@@ -41,7 +41,6 @@ class MoviesRepositoryImpl @Inject constructor(
     }
 
     override fun getMoviesAgainstQuery(query: String): Single<List<Movie>> {
-        var query = query.replace(" ", "").toLowerCase(Locale.ROOT)
         return database.moviesDao().getMoviesForQuery(query)
             .map { it.map { movieEntity -> movieMapper.mapToRemote(movieEntity) } }
             .subscribeOn(executionThreads.ioScheduler)

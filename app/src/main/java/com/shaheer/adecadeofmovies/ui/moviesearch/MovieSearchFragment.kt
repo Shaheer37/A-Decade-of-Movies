@@ -39,6 +39,10 @@ import javax.inject.Inject
 
 class MovieSearchFragment : BaseFragment(), MovieClickListener {
 
+    companion object{
+        private  const val AWAIT_SEARCH_TIMEOUT = 500L
+    }
+
     @Inject lateinit var viewModel: MovieSearchViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
@@ -118,7 +122,7 @@ class MovieSearchFragment : BaseFragment(), MovieClickListener {
             et_search.addTextChangedListener { text: Editable? ->
                 it.onNext(text?.toString()?:"")
             }
-        }.debounce(500, TimeUnit.MILLISECONDS)
+        }.debounce(AWAIT_SEARCH_TIMEOUT, TimeUnit.MILLISECONDS)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({viewModel.searchMovies(it)},{it.printStackTrace()})
