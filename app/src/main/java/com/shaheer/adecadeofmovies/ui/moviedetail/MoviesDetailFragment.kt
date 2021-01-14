@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_movies_detail.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class MoviesDetailFragment : Fragment() {
+class MoviesDetailFragment : Fragment(), PhotoListClickListener {
 
     @Inject lateinit var viewModel: MoviesDetailViewModel
     @Inject lateinit var viewModelFactory: ViewModelFactory
@@ -100,6 +100,10 @@ class MoviesDetailFragment : Fragment() {
             result.throwable.printStackTrace()
         }
         is Result.Loading -> { result.data?.let { adapter.submitList(it) } }
+    }
+
+    override fun onRetry() {
+        viewModel.getPhotos()
     }
 
     private fun setMovieLayout(details: MovieDetails){

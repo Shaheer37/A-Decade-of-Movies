@@ -9,4 +9,5 @@
     <string name="no_photos_found">No Photos were found against this movie title.</string>
     <string name="genre">Genre</string>
     <string name="cast">Cast</string>
+    <string name="try_again">try again</string>
 </resources>

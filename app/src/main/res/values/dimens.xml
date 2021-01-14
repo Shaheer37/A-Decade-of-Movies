@@ -16,4 +16,5 @@
     <dimen name="movies_detail_title_text_size">22sp</dimen>
     <dimen name="movies_detail_margin_vertical">10dp</dimen>
     <dimen name="movies_detail_margin_horizontal">10dp</dimen>
+    <dimen name="row_error_vertical_margin">10dp</dimen>
 </resources>
